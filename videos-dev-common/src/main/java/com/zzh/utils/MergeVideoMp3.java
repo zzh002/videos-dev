@@ -63,9 +63,9 @@ public class MergeVideoMp3 {
 	}
 
 	public static void main(String[] args) {
-		MergeVideoMp3 ffmpeg = new MergeVideoMp3("C:\\ffmpeg\\bin\\ffmpeg.exe");
+		MergeVideoMp3 ffmpeg = new MergeVideoMp3("D:\\ffmpeg\\bin\\ffmpeg.exe");
 		try {
-			ffmpeg.convertor("C:\\苏州大裤衩.mp4", "C:\\music.mp3", 7.1, "C:\\这是通过java生产的视频.mp4");
+			ffmpeg.convertor("D:\\短视频\\1539239278805249211.mp4", "D:\\music.mp3", 7.1, "D:\\短视频\\123.mp4");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

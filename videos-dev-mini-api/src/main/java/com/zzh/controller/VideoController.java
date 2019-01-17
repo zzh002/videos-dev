@@ -1,7 +1,12 @@
 package com.zzh.controller;
 
+import com.zzh.enums.VideoStatusEnum;
 import com.zzh.pojo.Bgm;
+import com.zzh.pojo.Videos;
 import com.zzh.service.BgmService;
+import com.zzh.service.VideoService;
+import com.zzh.utils.ExtractVideo;
+import com.zzh.utils.FetchVideoCover;
 import com.zzh.utils.JSONResult;
 import com.zzh.utils.MergeVideoMp3;
 import io.swagger.annotations.*;
@@ -30,6 +35,11 @@ public class VideoController extends BasicController {
 
     @Autowired
     BgmService bgmService;
+
+    @Autowired
+    VideoService videoService;
+
+
 
     @ApiOperation(value="上传视频", notes="上传视频的接口")
     @ApiImplicitParams({
@@ -118,37 +128,103 @@ public class VideoController extends BasicController {
             Bgm bgm = bgmService.queryBgmById(bgmId);
             String mp3InputPath = FILE_SPACE + bgm.getPath();
 
-            MergeVideoMp3 tool = new MergeVideoMp3(FFMPEG_EXE);
+            ExtractVideo extractVideo = new ExtractVideo(FFMPEG_EXE);
             String videoInputPath = finalVideoPath;
-
             String videoOutputName = UUID.randomUUID().toString() + ".mp4";
+            String videoOutputPath = FILE_SPACE + "/" +userId + "/video" + "/" + videoOutputName;
+            extractVideo.convertor(videoInputPath,videoOutputPath);
+
+            MergeVideoMp3 tool = new MergeVideoMp3(FFMPEG_EXE);
+            videoOutputName = UUID.randomUUID().toString() + ".mp4";
             uploadPathDB = "/" + userId + "/video" + "/" + videoOutputName;
             finalVideoPath = FILE_SPACE + uploadPathDB;
-            tool.convertor(videoInputPath, mp3InputPath, videoSeconds, finalVideoPath);
+            tool.convertor(videoOutputPath, mp3InputPath, videoSeconds, finalVideoPath);
         }
         System.out.println("uploadPathDB=" + uploadPathDB);
         System.out.println("finalVideoPath=" + finalVideoPath);
 
 //        // 对视频进行截图
-//        FetchVideoCover videoInfo = new FetchVideoCover(FFMPEG_EXE);
-//        videoInfo.getCover(finalVideoPath, FILE_SPACE + coverPathDB);
-//
-//        // 保存视频信息到数据库
-//        Videos video = new Videos();
-//        video.setAudioId(bgmId);
-//        video.setUserId(userId);
-//        video.setVideoSeconds((float)videoSeconds);
-//        video.setVideoHeight(videoHeight);
-//        video.setVideoWidth(videoWidth);
-//        video.setVideoDesc(desc);
-//        video.setVideoPath(uploadPathDB);
-//        video.setCoverPath(coverPathDB);
-//        video.setStatus(VideoStatusEnum.SUCCESS.value);
-//        video.setCreateTime(new Date());
-//
-//        String videoId = videoService.saveVideo(video);
-//
-//        return JSONResult.ok(videoId);
+        FetchVideoCover videoInfo = new FetchVideoCover(FFMPEG_EXE);
+        videoInfo.getCover(finalVideoPath, FILE_SPACE + coverPathDB);
+
+        // 保存视频信息到数据库
+        Videos video = new Videos();
+        video.setAudioId(bgmId);
+        video.setUserId(userId);
+        video.setVideoSeconds((float)videoSeconds);
+        video.setVideoHeight(videoHeight);
+        video.setVideoWidth(videoWidth);
+        video.setVideoDesc(desc);
+        video.setVideoPath(uploadPathDB);
+        video.setCoverPath(coverPathDB);
+        video.setStatus(VideoStatusEnum.SUCCESS.value);
+        video.setCreateTime(new Date());
+
+        String videoId = videoService.saveVideo(video);
+
+        return JSONResult.ok(videoId);
+
+    }
+
+    @ApiOperation(value="上传封面", notes="上传封面的接口")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="userId", value="用户id", required=true,
+                    dataType="String", paramType="form"),
+            @ApiImplicitParam(name="videoId", value="视频主键id", required=true,
+                    dataType="String", paramType="form")
+    })
+    @PostMapping(value="/uploadCover", headers="content-type=multipart/form-data")
+    public JSONResult uploadCover(String userId,
+                                       String videoId,
+                                       @ApiParam(value="视频封面", required=true)
+                                               MultipartFile file) throws Exception {
+
+        if (StringUtils.isBlank(videoId) || StringUtils.isBlank(userId)) {
+            return JSONResult.errorMsg("视频主键id和用户id不能为空...");
+        }
+
+        // 保存到数据库中的相对路径
+        String uploadPathDB = "/" + userId + "/video";
+
+        FileOutputStream fileOutputStream = null;
+        InputStream inputStream = null;
+        // 文件上传的最终保存路径
+        String finalCoverPath = "";
+        try {
+            if (file != null) {
+
+                String fileName = file.getOriginalFilename();
+                if (StringUtils.isNotBlank(fileName)) {
+
+                    finalCoverPath = FILE_SPACE + uploadPathDB + "/" + fileName;
+                    // 设置数据库保存的路径
+                    uploadPathDB += ("/" + fileName);
+
+                    File outFile = new File(finalCoverPath);
+                    if (outFile.getParentFile() != null || !outFile.getParentFile().isDirectory()) {
+                        // 创建父文件夹
+                        outFile.getParentFile().mkdirs();
+                    }
+
+                    fileOutputStream = new FileOutputStream(outFile);
+                    inputStream = file.getInputStream();
+                    IOUtils.copy(inputStream, fileOutputStream);
+                }
+
+            } else {
+                return JSONResult.errorMsg("上传出错...");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return JSONResult.errorMsg("上传出错...");
+        } finally {
+            if (fileOutputStream != null) {
+                fileOutputStream.flush();
+                fileOutputStream.close();
+            }
+        }
+
+        videoService.updateVideo(videoId, uploadPathDB);
 
         return JSONResult.ok();
     }
