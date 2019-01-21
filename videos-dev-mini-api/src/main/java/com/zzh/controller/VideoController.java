@@ -5,17 +5,12 @@ import com.zzh.pojo.Bgm;
 import com.zzh.pojo.Videos;
 import com.zzh.service.BgmService;
 import com.zzh.service.VideoService;
-import com.zzh.utils.ExtractVideo;
-import com.zzh.utils.FetchVideoCover;
-import com.zzh.utils.JSONResult;
-import com.zzh.utils.MergeVideoMp3;
+import com.zzh.utils.*;
 import io.swagger.annotations.*;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -226,6 +221,50 @@ public class VideoController extends BasicController {
 
         videoService.updateVideo(videoId, uploadPathDB);
 
+        return JSONResult.ok();
+    }
+
+    /**
+     *
+     * @Description: 分页和搜索查询视频列表
+     * isSaveRecord：1 - 需要保存
+     * 				 0 - 不需要保存 ，或者为空的时候
+     */
+    @PostMapping(value="/showAll")
+    public JSONResult showAll(@RequestBody Videos video, Integer isSaveRecord,
+                              Integer page,
+                              Integer pageSize) {
+
+        if (page == null) {
+            page = 1;
+        }
+
+        if (pageSize == null) {
+            pageSize = PAGE_SIZE;
+        }
+
+        PagedResult result = videoService.getAllVideos(video, isSaveRecord, page, pageSize);
+        return JSONResult.ok(result);
+    }
+
+    /**
+     * 热搜次查询
+     * @return
+     */
+    @PostMapping(value="/hot")
+    public JSONResult hot() {
+        return JSONResult.ok(videoService.getHotwords());
+    }
+
+    @PostMapping(value="/userLike")
+    public JSONResult userLike(String userId, String videoId, String videoCreaterId) {
+        videoService.userLikeVideo(userId, videoId, videoCreaterId);
+        return JSONResult.ok();
+    }
+
+    @PostMapping(value="/userUnLike")
+    public JSONResult userUnLike(String userId, String videoId, String videoCreaterId) {
+        videoService.userUnLikeVideo(userId, videoId, videoCreaterId);
         return JSONResult.ok();
     }
 }

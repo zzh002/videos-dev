@@ -1,6 +1,7 @@
 package com.zzh.controller;
 
 import com.zzh.pojo.Users;
+import com.zzh.pojo.vo.PublisherVideo;
 import com.zzh.pojo.vo.UsersVO;
 import com.zzh.service.UserService;
 import com.zzh.utils.JSONResult;
@@ -107,6 +108,55 @@ public class UserController extends BasicController{
         UsersVO userVO = new UsersVO();
         BeanUtils.copyProperties(userInfo, userVO);
 
+        userVO.setFollow(userService.queryIfFollow(userId, fanId));
+
         return JSONResult.ok(userVO);
+    }
+
+    @PostMapping("/queryPublisher")
+    public JSONResult queryPublisher(String loginUserId, String videoId,
+                                          String publishUserId) {
+
+        if (StringUtils.isBlank(publishUserId)) {
+            return JSONResult.errorMsg("");
+        }
+
+        // 1. 查询视频发布者的信息
+        Users userInfo = userService.queryUserInfo(publishUserId);
+        UsersVO publisher = new UsersVO();
+        BeanUtils.copyProperties(userInfo, publisher);
+
+        // 2. 查询当前登录者和视频的点赞关系
+        boolean userLikeVideo = userService.isUserLikeVideo(loginUserId, videoId);
+
+        PublisherVideo bean = new PublisherVideo();
+        bean.setPublisher(publisher);
+        bean.setUserLikeVideo(userLikeVideo);
+
+        return JSONResult.ok(bean);
+    }
+
+    @PostMapping("/beyourfans")
+    public JSONResult beyourfans(String userId, String fanId) {
+
+        if (StringUtils.isBlank(userId) || StringUtils.isBlank(fanId)) {
+            return JSONResult.errorMsg("");
+        }
+
+        userService.saveUserFanRelation(userId, fanId);
+
+        return JSONResult.ok("关注成功...");
+    }
+
+    @PostMapping("/dontbeyourfans")
+    public JSONResult dontbeyourfans(String userId, String fanId) {
+
+        if (StringUtils.isBlank(userId) || StringUtils.isBlank(fanId)) {
+            return JSONResult.errorMsg("");
+        }
+
+        userService.deleteUserFanRelation(userId, fanId);
+
+        return JSONResult.ok("取消关注成功...");
     }
 }
