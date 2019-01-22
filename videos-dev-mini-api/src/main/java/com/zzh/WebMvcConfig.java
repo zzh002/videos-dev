@@ -1,6 +1,7 @@
 package com.zzh;
 
 
+import com.zzh.controller.interceptor.LoginInterceptor;
 import com.zzh.controller.interceptor.MiniInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +24,11 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 		return new MiniInterceptor();
 	}
 
+	@Bean
+	public LoginInterceptor loginInterceptor() {
+		return new LoginInterceptor();
+	}
+
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 
@@ -33,6 +39,9 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 				.addPathPatterns("/bgm/**")
 				.excludePathPatterns("/user/queryPublisher");
 
+		registry.addInterceptor(loginInterceptor())
+				.addPathPatterns("/admin/**")
+				.excludePathPatterns("/admin/login");
 		super.addInterceptors(registry);
 	}
 

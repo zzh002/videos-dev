@@ -9,7 +9,8 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>videos-dev-mini-api</artifactId>
+    <artifactId>videos</artifactId>
+    <packaging>war</packaging>
 
     <dependencies>
         <dependency>
@@ -19,5 +20,18 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <plugins>
+            <!--设置war包名字-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.5</version>
+                <configuration>
+                    <warName>${project.artifactId}</warName>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
