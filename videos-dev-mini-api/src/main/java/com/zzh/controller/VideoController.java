@@ -2,6 +2,7 @@ package com.zzh.controller;
 
 import com.zzh.enums.VideoStatusEnum;
 import com.zzh.pojo.Bgm;
+import com.zzh.pojo.Comments;
 import com.zzh.pojo.Videos;
 import com.zzh.service.BgmService;
 import com.zzh.service.VideoService;
@@ -248,6 +249,50 @@ public class VideoController extends BasicController {
     }
 
     /**
+     * @Description: 我关注的人发的视频
+     */
+    @PostMapping("/showMyFollow")
+    public JSONResult showMyFollow(String userId, Integer page) {
+
+        if (StringUtils.isBlank(userId)) {
+            return JSONResult.ok();
+        }
+
+        if (page == null) {
+            page = 1;
+        }
+
+        int pageSize = 6;
+
+        PagedResult videosList = videoService.queryMyFollowVideos(userId, page, pageSize);
+
+        return JSONResult.ok(videosList);
+    }
+
+    /**
+     * @Description: 我收藏(点赞)过的视频列表
+     */
+    @PostMapping("/showMyLike")
+    public JSONResult showMyLike(String userId, Integer page, Integer pageSize) {
+
+        if (StringUtils.isBlank(userId)) {
+            return JSONResult.ok();
+        }
+
+        if (page == null) {
+            page = 1;
+        }
+
+        if (pageSize == null) {
+            pageSize = 6;
+        }
+
+        PagedResult videosList = videoService.queryMyLikeVideos(userId, page, pageSize);
+
+        return JSONResult.ok(videosList);
+    }
+
+    /**
      * 热搜次查询
      * @return
      */
@@ -266,5 +311,37 @@ public class VideoController extends BasicController {
     public JSONResult userUnLike(String userId, String videoId, String videoCreaterId) {
         videoService.userUnLikeVideo(userId, videoId, videoCreaterId);
         return JSONResult.ok();
+    }
+
+    @PostMapping("/saveComment")
+    public JSONResult saveComment(@RequestBody Comments comment,
+                                       String fatherCommentId, String toUserId) throws Exception {
+
+        comment.setFatherCommentId(fatherCommentId);
+        comment.setToUserId(toUserId);
+
+        videoService.saveComment(comment);
+        return JSONResult.ok();
+    }
+
+    @PostMapping("/getVideoComments")
+    public JSONResult getVideoComments(String videoId, Integer page, Integer pageSize) throws Exception {
+
+        if (StringUtils.isBlank(videoId)) {
+            return JSONResult.ok();
+        }
+
+        // 分页查询视频列表，时间顺序倒序排序
+        if (page == null) {
+            page = 1;
+        }
+
+        if (pageSize == null) {
+            pageSize = 10;
+        }
+
+        PagedResult list = videoService.getAllComments(videoId, page, pageSize);
+
+        return JSONResult.ok(list);
     }
 }

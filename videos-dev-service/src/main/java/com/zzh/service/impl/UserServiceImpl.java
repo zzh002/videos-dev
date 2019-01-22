@@ -3,9 +3,11 @@ package com.zzh.service.impl;
 import com.zzh.mapper.UsersFansMapper;
 import com.zzh.mapper.UsersLikeVideosMapper;
 import com.zzh.mapper.UsersMapper;
+import com.zzh.mapper.UsersReportMapper;
 import com.zzh.pojo.Users;
 import com.zzh.pojo.UsersFans;
 import com.zzh.pojo.UsersLikeVideos;
+import com.zzh.pojo.UsersReport;
 import com.zzh.service.UserService;
 import com.zzh.utils.KeyUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -15,6 +17,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -33,6 +36,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UsersLikeVideosMapper usersLikeVideosMapper;
+
+    @Autowired
+    private UsersReportMapper usersReportMapper;
 
 
     @Transactional(propagation = Propagation.SUPPORTS)
@@ -164,5 +170,18 @@ public class UserServiceImpl implements UserService {
         }
 
         return false;
+    }
+
+
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    @Override
+    public void reportUser(UsersReport userReport) {
+
+        String urId = KeyUtils.genUniqueKey();
+        userReport.setId(urId);
+        userReport.setCreateDate(new Date());
+
+        usersReportMapper.insert(userReport);
     }
 }

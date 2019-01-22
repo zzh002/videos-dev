@@ -1,6 +1,7 @@
 package com.zzh.service;
 
 import com.zzh.pojo.Users;
+import com.zzh.pojo.UsersReport;
 
 /**
  * @author ZZH
@@ -48,4 +49,9 @@ public interface UserService {
      * @Description: 查询用户是否关注
      */
     boolean queryIfFollow(String userId, String fanId);
+
+    /**
+     * @Description: 举报用户
+     */
+    void reportUser(UsersReport userReport);
 }

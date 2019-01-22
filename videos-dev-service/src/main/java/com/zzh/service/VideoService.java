@@ -1,5 +1,6 @@
 package com.zzh.service;
 
+import com.zzh.pojo.Comments;
 import com.zzh.pojo.Videos;
 import com.zzh.utils.PagedResult;
 
@@ -27,6 +28,16 @@ public interface VideoService {
                              Integer page, Integer pageSize);
 
     /**
+     * @Description: 查询我喜欢的视频列表
+     */
+    PagedResult queryMyLikeVideos(String userId, Integer page, Integer pageSize);
+
+    /**
+     * @Description: 查询我关注的人的视频列表
+     */
+    PagedResult queryMyFollowVideos(String userId, Integer page, Integer pageSize);
+
+    /**
      * @Description: 获取热搜词列表
      */
     List<String> getHotwords();
@@ -40,4 +51,14 @@ public interface VideoService {
      * @Description: 用户不喜欢/取消点赞视频
      */
     void userUnLikeVideo(String userId, String videoId, String videoCreaterId);
+
+    /**
+     * @Description: 用户留言
+     */
+    void saveComment(Comments comment);
+
+    /**
+     * @Description: 留言分页
+     */
+    PagedResult getAllComments(String videoId, Integer page, Integer pageSize);
 }

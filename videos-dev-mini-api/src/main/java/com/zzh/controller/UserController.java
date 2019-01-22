@@ -1,6 +1,7 @@
 package com.zzh.controller;
 
 import com.zzh.pojo.Users;
+import com.zzh.pojo.UsersReport;
 import com.zzh.pojo.vo.PublisherVideo;
 import com.zzh.pojo.vo.UsersVO;
 import com.zzh.service.UserService;
@@ -12,10 +13,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -158,5 +156,14 @@ public class UserController extends BasicController{
         userService.deleteUserFanRelation(userId, fanId);
 
         return JSONResult.ok("取消关注成功...");
+    }
+
+    @PostMapping("/reportUser")
+    public JSONResult reportUser(@RequestBody UsersReport usersReport) {
+
+        // 保存举报信息
+        userService.reportUser(usersReport);
+
+        return JSONResult.errorMsg("举报成功...有你平台变得更美好...");
     }
 }
