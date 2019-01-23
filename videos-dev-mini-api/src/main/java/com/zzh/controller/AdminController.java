@@ -120,6 +120,8 @@ public class AdminController extends BasicController {
 
     @GetMapping("/showAddBgm")
     public ModelAndView showAddBgm(Map<String, Object> map) {
+        String url = projectUrlConfig.getUrl();
+        map.put("url",url);
         return new ModelAndView("video/addBgm",map);
     }
 
@@ -143,10 +145,9 @@ public class AdminController extends BasicController {
     public JSONResult bgmUpload(@RequestParam("file") MultipartFile[] files) throws Exception {
 
         // 文件保存的命名空间
-//		String fileSpace = File.separator + "imooc_videos_dev" + File.separator + "mvc-bgm";
-        String fileSpace = FILE_SPACE + File.separator + "bgm";
+        String fileSpace = FILE_SPACE ;
         // 保存到数据库中的相对路径
-        String uploadPathDB = File.separator + "bgm";
+        String uploadPathDB = "/bgm";
 
         FileOutputStream fileOutputStream = null;
         InputStream inputStream = null;
@@ -156,9 +157,9 @@ public class AdminController extends BasicController {
                 String fileName = files[0].getOriginalFilename();
                 if (StringUtils.isNotBlank(fileName)) {
                     // 文件上传的最终保存路径
-                    String finalPath = fileSpace + uploadPathDB + File.separator + fileName;
+                    String finalPath = fileSpace + uploadPathDB + "/" + fileName;
                     // 设置数据库保存的路径
-                    uploadPathDB += (File.separator + fileName);
+                    uploadPathDB += ("/" + fileName);
 
                     File outFile = new File(finalPath);
                     if (outFile.getParentFile() != null || !outFile.getParentFile().isDirectory()) {
