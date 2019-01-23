@@ -35,7 +35,7 @@
                     </a>
                     <ul class="sub-menu">
                         <li class="nav-item ">
-                            <a href="users/showList.action" class="ajaxify nav-link ">
+                            <a href="/admin/showUserList" class="ajaxify nav-link ">
                                 <span class="title">用户列表</span>
                             </a>
                         </li>
@@ -51,12 +51,12 @@
                     </a>
                     <ul class="sub-menu">
 						<li class="nav-item ">
-                            <a id="bgmListMenu" href="video/showBgmList.action" class="ajaxify nav-link " id="bgmListMenu">
+                            <a id="bgmListMenu" href="/admin/showBgmList" class="ajaxify nav-link " id="bgmListMenu">
                                 <span class="title">bgm列表</span>
                             </a>
                         </li>
                         <li class="nav-item ">
-                            <a href="video/showAddBgm.action" class="ajaxify nav-link ">
+                            <a href="/admin/showAddBgm" class="ajaxify nav-link ">
                                 <span class="title">添加bgm</span>
                             </a>
                         </li>
@@ -72,7 +72,7 @@
                     </a>
                     <ul class="sub-menu">
 						<li class="nav-item ">
-                            <a href="video/showReportList.action" class="ajaxify nav-link ">
+                            <a href="/admin/showReportList" class="ajaxify nav-link ">
                                 <span class="title">举报列表</span>
                             </a>
                         </li>

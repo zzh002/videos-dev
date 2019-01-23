@@ -6,7 +6,7 @@ var deleteBgm = function(bgmId) {
 	}
 	
 	$.ajax({
-		url: $("#hdnContextPath").val() + '/video/delBgm.action?bgmId=' + bgmId,
+		url: $("#hdnContextPath").val() + '/admin/delBgm?bgmId=' + bgmId,
 		type: "POST",
 		success: function(data) {
 			if (data.status == 200 && data.msg == 'OK') {
@@ -31,7 +31,7 @@ var BgmList = function() {
 		var jqGrid = $("#bgmList");  
         jqGrid.jqGrid({  
             caption: "所有bgm列表",  
-            url: hdnContextPath + "/video/queryBgmList.action",  
+            url: hdnContextPath + "/admin/queryBgmList",
             mtype: "post",  
             styleUI: 'Bootstrap',//设置jqgrid的全局样式为bootstrap样式  
             datatype: "json",  

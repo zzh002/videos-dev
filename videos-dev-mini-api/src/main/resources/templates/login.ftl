@@ -26,7 +26,7 @@
     <link href="/static/pages/css/login-2.min.css" rel="stylesheet" type="text/css" />
     <!-- END PAGE LEVEL STYLES -->
 
-	<link rel="shortcut icon" href="/static/portal/image/itzixi_favicon.ico" type="image/x-icon">
+	<#--<link rel="shortcut icon" href="/static/portal/image/itzixi_favicon.ico" type="image/x-icon">-->
         
 	<style type="text/css">
 		.help-block {
@@ -96,7 +96,7 @@
             <!-- END REGISTRATION FORM -->
         </div>
         
-        <input type="hidden" id="hdnContextPath" name="hdnContextPath" value="<%=request.getContextPath() %>"/>
+        <input type="hidden" id="hdnContextPath" name="hdnContextPath" value=${url}/>
         
 <!--[if lt IE 9]>
 <script src="/static/global/plugins/respond.min.js?v=3.1415926"></script>

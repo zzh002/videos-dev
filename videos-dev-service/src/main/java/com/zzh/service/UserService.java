@@ -2,6 +2,7 @@ package com.zzh.service;
 
 import com.zzh.pojo.Users;
 import com.zzh.pojo.UsersReport;
+import com.zzh.utils.PagedResult;
 
 /**
  * @author ZZH
@@ -54,4 +55,6 @@ public interface UserService {
      * @Description: 举报用户
      */
     void reportUser(UsersReport userReport);
+
+    PagedResult queryUsers(Users user, Integer page, Integer pageSize);
 }

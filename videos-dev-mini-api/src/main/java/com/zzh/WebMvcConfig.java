@@ -41,7 +41,9 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
 		registry.addInterceptor(loginInterceptor())
 				.addPathPatterns("/admin/**")
-				.excludePathPatterns("/admin/login");
+				.excludePathPatterns("/admin/login")
+				.excludePathPatterns("/admin/loginCheckout")
+				.excludePathPatterns("/admin/logout");
 		super.addInterceptors(registry);
 	}
 

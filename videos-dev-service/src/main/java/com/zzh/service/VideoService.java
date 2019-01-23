@@ -1,5 +1,6 @@
 package com.zzh.service;
 
+import com.zzh.pojo.Bgm;
 import com.zzh.pojo.Comments;
 import com.zzh.pojo.Videos;
 import com.zzh.utils.PagedResult;
@@ -61,4 +62,14 @@ public interface VideoService {
      * @Description: 留言分页
      */
     PagedResult getAllComments(String videoId, Integer page, Integer pageSize);
+
+    PagedResult queryReportList(Integer page, Integer pageSize);
+
+    void updateVideoStatus(String videoId, Integer status);
+
+    PagedResult queryBgmList(Integer page, Integer pageSize);
+
+    void addBgm(Bgm bgm);
+
+    void deleteBgm(String id);
 }

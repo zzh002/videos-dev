@@ -1,5 +1,7 @@
 package com.zzh.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.zzh.mapper.UsersFansMapper;
 import com.zzh.mapper.UsersLikeVideosMapper;
 import com.zzh.mapper.UsersMapper;
@@ -10,6 +12,7 @@ import com.zzh.pojo.UsersLikeVideos;
 import com.zzh.pojo.UsersReport;
 import com.zzh.service.UserService;
 import com.zzh.utils.KeyUtils;
+import com.zzh.utils.PagedResult;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -183,5 +186,39 @@ public class UserServiceImpl implements UserService {
         userReport.setCreateDate(new Date());
 
         usersReportMapper.insert(userReport);
+    }
+
+    @Override
+    public PagedResult queryUsers(Users user, Integer page, Integer pageSize) {
+
+        String username = "";
+        String nickname = "";
+        if (user != null) {
+            username = user.getUsername();
+            nickname = user.getNickname();
+        }
+
+        PageHelper.startPage(page, pageSize);
+
+        Example example = new Example(Users.class);
+        Example.Criteria userCriteria = example.createCriteria();
+        if (StringUtils.isNotBlank(username)) {
+            userCriteria.andLike("username","%" + username + "%");
+        }
+        if (StringUtils.isNotBlank(nickname)) {
+            userCriteria.andLike("nickname","%" + nickname + "%");
+        }
+
+        List<Users> userList = usersMapper.selectByExample(example);
+
+        PageInfo<Users> pageList = new PageInfo<Users>(userList);
+
+        PagedResult grid = new PagedResult();
+        grid.setTotal(pageList.getPages());
+        grid.setRows(userList);
+        grid.setPage(page);
+        grid.setRecords(pageList.getTotal());
+
+        return grid;
     }
 }

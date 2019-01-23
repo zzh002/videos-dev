@@ -26,7 +26,6 @@ public class LoginInterceptor implements HandlerInterceptor {
 
         if(null == request.getSession().getAttribute(ADMIN_SESSION)){
             response.sendRedirect(request.getContextPath()+"/admin/login");
-
             return false;
         }
 

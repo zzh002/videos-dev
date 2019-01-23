@@ -2,12 +2,11 @@ package com.zzh.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.zzh.enums.BGMOperatorTypeEnum;
 import com.zzh.mapper.*;
-import com.zzh.pojo.Comments;
-import com.zzh.pojo.SearchRecords;
-import com.zzh.pojo.UsersLikeVideos;
-import com.zzh.pojo.Videos;
+import com.zzh.pojo.*;
 import com.zzh.pojo.vo.CommentsVO;
+import com.zzh.pojo.vo.Reports;
 import com.zzh.pojo.vo.VideosVO;
 import com.zzh.service.VideoService;
 import com.zzh.utils.KeyUtils;
@@ -20,7 +19,9 @@ import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author ZZH
@@ -49,6 +50,13 @@ public class VideoServiceImpl implements VideoService {
 
     @Autowired
     private CommentsMapperCustom commentsMapperCustom;
+
+    @Autowired
+    private UsersReportMapperCustom usersReportMapperCustom;
+
+    @Autowired
+    private BgmMapper bgmMapper;
+
 
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
@@ -211,5 +219,78 @@ public class VideoServiceImpl implements VideoService {
         grid.setRecords(pageList.getTotal());
 
         return grid;
+    }
+
+    @Override
+    public PagedResult queryReportList(Integer page, Integer pageSize) {
+
+        PageHelper.startPage(page, pageSize);
+
+        List<Reports> reportsList = usersReportMapperCustom.selectAllVideoReport();
+
+        PageInfo<Reports> pageList = new PageInfo<Reports>(reportsList);
+
+        PagedResult grid = new PagedResult();
+        grid.setTotal(pageList.getPages());
+        grid.setRows(reportsList);
+        grid.setPage(page);
+        grid.setRecords(pageList.getTotal());
+
+        return grid;
+    }
+
+    @Override
+    public void updateVideoStatus(String videoId, Integer status) {
+
+        Videos video = new Videos();
+        video.setId(videoId);
+        video.setStatus(status);
+        videosMapper.updateByPrimaryKeySelective(video);
+    }
+
+    @Override
+    public PagedResult queryBgmList(Integer page, Integer pageSize) {
+
+        PageHelper.startPage(page, pageSize);
+
+        Example example = new Example(Bgm.class);
+        List<Bgm> list = bgmMapper.selectByExample(example);
+
+        PageInfo<Bgm> pageList = new PageInfo<>(list);
+
+        PagedResult result = new PagedResult();
+        result.setTotal(pageList.getPages());
+        result.setRows(list);
+        result.setPage(page);
+        result.setRecords(pageList.getTotal());
+
+        return result;
+    }
+
+    @Override
+    public void addBgm(Bgm bgm) {
+        String bgmId = KeyUtils.genUniqueKey();
+        bgm.setId(bgmId);
+        bgmMapper.insert(bgm);
+
+        Map<String, String> map = new HashMap<>();
+        map.put("operType", BGMOperatorTypeEnum.ADD.type);
+        map.put("path", bgm.getPath());
+
+//        zkCurator.sendBgmOperator(bgmId, JsonUtils.objectToJson(map));
+    }
+
+    @Override
+    public void deleteBgm(String id) {
+        Bgm bgm = bgmMapper.selectByPrimaryKey(id);
+
+        bgmMapper.deleteByPrimaryKey(id);
+
+        Map<String, String> map = new HashMap<>();
+        map.put("operType", BGMOperatorTypeEnum.DELETE.type);
+        map.put("path", bgm.getPath());
+
+//        zkCurator.sendBgmOperator(id, JsonUtils.objectToJson(map));
+
     }
 }

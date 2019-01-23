@@ -46,12 +46,12 @@ var Login = function() {
             	loginForm.ajaxSubmit({
             		dataType: "json",
                     type: "post", // 提交方式 get/post
-                    url: hdnContextPath + '/users/login.action', // 需要提交的 url
+                    url: hdnContextPath + '/admin/loginCheckout', // 需要提交的 url
                     data: loginForm.serialize(),
                     success: function(data) {
                         // 登录成功或者失败的提示信息
                         if (data.status == 200 && data.msg == "OK") {
-                        	window.location.href = hdnContextPath + "/center.action";
+                        	window.location.href = hdnContextPath + "/admin/menu";
                         } else {
 //                        	SweetAlert.error(data.msg);
                         	alert(data.msg);

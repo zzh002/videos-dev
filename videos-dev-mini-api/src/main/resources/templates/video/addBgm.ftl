@@ -111,7 +111,7 @@
     
     var submitBgm = function() {
     	$('#addBgmForm').ajaxSubmit({
-    		url: $('#hdnContextPath').val() + '/video/addBgm.action',
+    		url: $('#hdnContextPath').val() + '/admin/addBgm',
     		type: 'POST',
     		success: function(data) {
     			

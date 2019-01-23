@@ -6,7 +6,7 @@ var forbidVideo = function(videoId) {
 	}
 	
 	$.ajax({
-    	url: $("#hdnContextPath").val() + "/video/forbidVideo.action?videoId=" + videoId,
+    	url: $("#hdnContextPath").val() + "/admin/forbidVideo?videoId=" + videoId,
     	type: "POST",
     	async: false,
     	success: function(data) {
@@ -19,6 +19,29 @@ var forbidVideo = function(videoId) {
             }
     	}
 	})
+}
+
+var openVideo = function(videoId) {
+
+    var flag = window.confirm("是否解禁");
+    if (!flag) {
+        return;
+    }
+
+    $.ajax({
+        url: $("#hdnContextPath").val() + "/admin/openVideo?videoId=" + videoId,
+        type: "POST",
+        async: false,
+        success: function(data) {
+            if(data.status == 200 && data.msg == "OK") {
+                alert("操作成功");
+                var jqGrid = $("#usersReportsList");
+                jqGrid.jqGrid().trigger("reloadGrid");
+            } else {
+                console.log(JSON.stringify(data));
+            }
+        }
+    })
 }
 
 // 定义举报列表对象
@@ -34,7 +57,7 @@ var UsersReportsList = function () {
 		var jqGrid = $("#usersReportsList");  
         jqGrid.jqGrid({  
             caption: "被举报的视频列表",  
-            url: hdnContextPath + "/video/reportList.action",  
+            url: hdnContextPath + "/admin/reportList",
             mtype: "post",  
             styleUI: 'Bootstrap',//设置jqgrid的全局样式为bootstrap样式  
             datatype: "json",  
@@ -64,10 +87,11 @@ var UsersReportsList = function () {
 			    		return createTime;
 			    	}
 			    },
-                { name: '', index: '', width: 20, sortable: false, hidden: false,
+                { name: 'status', index: 'status', width: 20, sortable: false, hidden: false,
                 	formatter:function(cellvalue, options, rowObject) {
-                		var button = '<button class="btn btn-outline blue-chambray" id="" onclick=forbidVideo("' + rowObject.dealVideoId + '") style="padding: 1px 3px 1px 3px;">禁止播放</button>';
-			    		return button;
+                		var buttonForbid = '<button class="btn btn-outline blue-chambray" id="" onclick=forbidVideo("' + rowObject.dealVideoId + '") style="padding: 1px 3px 1px 3px;">禁播</button>';
+                        var buttonOpen = '<button class="btn btn-outline blue-chambray" id="" onclick=openVideo("' + rowObject.dealVideoId + '") style="padding: 1px 3px 1px 3px;">解禁</button>';
+			    		return cellvalue==1 ? buttonForbid : buttonOpen;
 			    	}
 			    }
             ],  
