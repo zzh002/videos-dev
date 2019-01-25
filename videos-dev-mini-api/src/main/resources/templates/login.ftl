@@ -8,25 +8,25 @@
     <meta content="width=device-width, initial-scale=1" name="viewport" />
     <meta content="leechenxiang" name="author" />
     
-    <link href="/static/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
-    <link href="/static/global/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css" />
-    <link href="/static/global/plugins/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
-	<link href="/static/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css" />
+    <link href="../static/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="../static/global/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="../static/global/plugins/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
+	<link href="../static/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css" />
     <!-- END GLOBAL MANDATORY STYLES -->
     <!-- BEGIN PAGE LEVEL PLUGINS -->
-    <link href="/static/global/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
-    <link href="/static/global/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css" />
-    <link href="/static/global/plugins/bootstrap-sweetalert/sweetalert.css" rel="stylesheet" type="text/css" />
+    <link href="../static/global/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
+    <link href="../static/global/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="../static/global/plugins/bootstrap-sweetalert/sweetalert.css" rel="stylesheet" type="text/css" />
     <!-- END PAGE LEVEL PLUGINS -->
     <!-- BEGIN THEME GLOBAL STYLES -->
-    <link href="/static/global/css/components.min.css" rel="stylesheet" id="style_components" type="text/css" />
-	<link href="/static/global/css/plugins.min.css" rel="stylesheet" type="text/css" />
+    <link href="../static/global/css/components.min.css" rel="stylesheet" id="style_components" type="text/css" />
+	<link href="../static/global/css/plugins.min.css" rel="stylesheet" type="text/css" />
     <!-- END THEME GLOBAL STYLES -->
     <!-- BEGIN PAGE LEVEL STYLES -->
-    <link href="/static/pages/css/login-2.min.css" rel="stylesheet" type="text/css" />
+    <link href="../static/pages/css/login-2.min.css" rel="stylesheet" type="text/css" />
     <!-- END PAGE LEVEL STYLES -->
 
-	<#--<link rel="shortcut icon" href="/static/portal/image/itzixi_favicon.ico" type="image/x-icon">-->
+	<#--<link rel="shortcut icon" href="../static/portal/image/itzixi_favicon.ico" type="image/x-icon">-->
         
 	<style type="text/css">
 		.help-block {
@@ -41,8 +41,8 @@
 <body class="login">
         <!-- BEGIN LOGO -->
         <div class="logo">
-            <a href="/">
-                <img src="/static/pages/img/logos/logo.png" />
+            <a href="/videos/admin/menu">
+                <img src="../static/pages/img/logos/logo.png" />
             </a>
         </div>
         <!-- END LOGO -->
@@ -99,16 +99,16 @@
         <input type="hidden" id="hdnContextPath" name="hdnContextPath" value=${url}/>
         
 <!--[if lt IE 9]>
-<script src="/static/global/plugins/respond.min.js?v=3.1415926"></script>
-<script src="/static/global/plugins/excanvas.min.js?v=3.1415926"></script>
-<script src="/static/global/plugins/ie8.fix.min.js?v=3.1415926"></script>
+<script src="../static/global/plugins/respond.min.js?v=3.1415926"></script>
+<script src="../static/global/plugins/excanvas.min.js?v=3.1415926"></script>
+<script src="../static/global/plugins/ie8.fix.min.js?v=3.1415926"></script>
 <![endif]-->
         
         <!-- 公用尾部JS start -->
 	    <#include "common/commonFooterJS.ftl">
 	    <!-- 公用尾部JS end -->
     
-        <script src="/static/pages/js/login.js?v=1.1" type="text/javascript"></script>
+        <script src="../static/pages/js/login.js?v=1.1" type="text/javascript"></script>
         
 </body>
 </html>

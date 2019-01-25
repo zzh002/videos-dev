@@ -1,6 +1,6 @@
 
 
-<script src="/static/pages/js/usersList.js?v=1.1" type="text/javascript"></script>
+<script src="../static/pages/js/usersList.js?v=1.1" type="text/javascript"></script>
 
 	<!-- BEGIN PAGE HEADER-->
 	<!-- BEGIN PAGE BAR -->

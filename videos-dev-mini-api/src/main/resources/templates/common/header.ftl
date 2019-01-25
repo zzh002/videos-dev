@@ -6,8 +6,8 @@
     <div class="page-header-inner ">
         <!-- BEGIN LOGO -->
         <div class="page-logo">
-            <a href="/">
-                <img src="/static/pages/img/logos/logo.png" alt="logo" class="logo-default" />
+            <a href="/videos/admin/menu">
+                <img src="../static/pages/img/logos/logo.png" alt="logo" class="logo-default" />
             </a>
             <div class="menu-toggler sidebar-toggler" style="width: 19px; height: 19px;">
                 <span style="top: 8px;"></span>
@@ -25,7 +25,7 @@
                 <!-- BEGIN USER LOGIN DROPDOWN -->
                 <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
                 <li class="dropdown dropdown-user">
-                    <a href="/admin/login" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                    <a href="/videos/admin/login" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                         <span class="username username-hide-on-mobile"> 欢迎登录 </span>
                     </a>
                 </li>
@@ -33,7 +33,7 @@
                 <!-- BEGIN QUICK SIDEBAR TOGGLER -->
                 <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
                 <li class="dropdown dropdown-quick-sidebar-toggler">
-                    <a href="/admin/logout" class="dropdown-toggle">
+                    <a href="/videos/admin/logout" class="dropdown-toggle">
                         <i class="icon-logout"></i>
                     </a>
                 </li>

@@ -1,6 +1,6 @@
 
 
-<script src="/static/pages/js/bgmList.js?v=1.0.0.2"
+<script src="../static/pages/js/bgmList.js?v=1.0.0.2"
 	type="text/javascript"></script>
 
 	<!-- BEGIN PAGE HEADER-->

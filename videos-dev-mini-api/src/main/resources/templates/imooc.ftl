@@ -13,7 +13,7 @@
 	<div class="page-bar">
 	    <ul class="page-breadcrumb">
 	        <li>
-	            <a href="index.html">首页</a>
+	            <a href="/admin/menu">首页</a>
 	        </li>
 	    </ul>
 	</div>
@@ -92,7 +92,7 @@
 	            <div class="portlet-body ">
 	            	<div class="row ">
 	                    <div class="col-md-4 ">
-	                        <img src="/static/pages/img/course/springboot.jpg" width="233px" class="img-responsive"/>
+	                        <img src="../static/pages/img/course/springboot.jpg" width="233px" class="img-responsive"/>
 	                    </div>
 	                    <div class="col-md-8 " >
 	                    	<h4><a href="https://www.imooc.com/comment/956" target="_blank">《SpringBoot开发常用技术整合》</a></h4>
@@ -100,7 +100,7 @@
 	                </div>
 	                <div class="row " style="margin-top: 10px;">
 	                    <div class="col-md-4 ">
-	                        <img src="/static/pages/img/course/zookeeper.jpg" width="233px" class="img-responsive"/>
+	                        <img src="../static/pages/img/course/zookeeper.jpg" width="233px" class="img-responsive"/>
 	                    </div>
 	                    <div class="col-md-8 " >
 	                    	<h4><a href="https://coding.imooc.com/class/201.html" target="_blank">《ZooKeeper分布式专题与Dubbo微服务入门》</a></h4>

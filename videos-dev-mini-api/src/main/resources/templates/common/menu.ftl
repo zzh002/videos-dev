@@ -20,7 +20,7 @@
                 
                	<!-- 控制台  start -->
                	<li class="nav-item">
-                	<a href="/admin/menu">
+                	<a href="/videos/admin/menu">
                     	<i class="icon-home"></i>
                         	<span class="title">首页</span>
 					</a>
@@ -35,7 +35,7 @@
                     </a>
                     <ul class="sub-menu">
                         <li class="nav-item ">
-                            <a href="/admin/showUserList" class="ajaxify nav-link ">
+                            <a href="/videos/admin/showUserList" class="ajaxify nav-link ">
                                 <span class="title">用户列表</span>
                             </a>
                         </li>
@@ -51,12 +51,12 @@
                     </a>
                     <ul class="sub-menu">
 						<li class="nav-item ">
-                            <a id="bgmListMenu" href="/admin/showBgmList" class="ajaxify nav-link " id="bgmListMenu">
+                            <a id="bgmListMenu" href="/videos/admin/showBgmList" class="ajaxify nav-link " id="bgmListMenu">
                                 <span class="title">bgm列表</span>
                             </a>
                         </li>
                         <li class="nav-item ">
-                            <a href="/admin/showAddBgm" class="ajaxify nav-link ">
+                            <a href="/videos/admin/showAddBgm" class="ajaxify nav-link ">
                                 <span class="title">添加bgm</span>
                             </a>
                         </li>
@@ -72,7 +72,7 @@
                     </a>
                     <ul class="sub-menu">
 						<li class="nav-item ">
-                            <a href="/admin/showReportList" class="ajaxify nav-link ">
+                            <a href="/videos/admin/showReportList" class="ajaxify nav-link ">
                                 <span class="title">举报列表</span>
                             </a>
                         </li>
