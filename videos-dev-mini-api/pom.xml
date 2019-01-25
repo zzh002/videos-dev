@@ -13,6 +13,12 @@
     <packaging>war</packaging>
 
     <dependencies>
+        <!-- 添加依赖 ， 为了打包成war -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>com.zzh</groupId>
             <artifactId>videos-dev-service</artifactId>
