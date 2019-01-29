@@ -36,7 +36,6 @@ public class VideoController extends BasicController {
     VideoService videoService;
 
 
-
     @ApiOperation(value="上传视频", notes="上传视频的接口")
     @ApiImplicitParams({
             @ApiImplicitParam(name="userId", value="用户id", required=true,
@@ -64,8 +63,6 @@ public class VideoController extends BasicController {
             return JSONResult.errorMsg("用户id不能为空...");
         }
 
-        // 文件保存的命名空间
-//		String fileSpace = "C:/imooc_videos_dev";
         // 保存到数据库中的相对路径
         String uploadPathDB = "/" + userId + "/video";
         String coverPathDB = "/" + userId + "/video";
@@ -85,8 +82,9 @@ public class VideoController extends BasicController {
                     fileNamePrefix += arrayFilenameItem[i];
                 }
                 // fix bug: 解决小程序端OK，PC端不OK的bug，原因：PC端和小程序端对临时视频的命名不同
-//				String fileNamePrefix = fileName.split("\\.")[0];
-
+//                if (StringUtils.isNotBlank(fileNamePrefix)) {
+//                    fileNamePrefix = fileName.split("\\.")[0];
+//                }
                 if (StringUtils.isNotBlank(fileName)) {
 
                     finalVideoPath = FILE_SPACE + uploadPathDB + "/" + fileName;
@@ -124,17 +122,25 @@ public class VideoController extends BasicController {
             Bgm bgm = bgmService.queryBgmById(bgmId);
             String mp3InputPath = FILE_SPACE + bgm.getPath();
 
+            //云服务器端进入ffmpeg运行目录
+            CDFfmpegDirectory.getCover();
+
+            //截取上传视频
             ExtractVideo extractVideo = new ExtractVideo(FFMPEG_EXE);
             String videoInputPath = finalVideoPath;
             String videoOutputName = UUID.randomUUID().toString() + ".mp4";
             String videoOutputPath = FILE_SPACE + "/" +userId + "/video" + "/" + videoOutputName;
             extractVideo.convertor(videoInputPath,videoOutputPath);
 
+            //视频合并bgm
             MergeVideoMp3 tool = new MergeVideoMp3(FFMPEG_EXE);
             videoOutputName = UUID.randomUUID().toString() + ".mp4";
             uploadPathDB = "/" + userId + "/video" + "/" + videoOutputName;
             finalVideoPath = FILE_SPACE + uploadPathDB;
             tool.convertor(videoOutputPath, mp3InputPath, videoSeconds, finalVideoPath);
+
+            //删除中间文件
+            DeleteFileUtils.delete(videoOutputPath);
         }
         System.out.println("uploadPathDB=" + uploadPathDB);
         System.out.println("finalVideoPath=" + finalVideoPath);

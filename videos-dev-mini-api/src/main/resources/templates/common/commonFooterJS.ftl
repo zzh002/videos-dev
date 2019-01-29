@@ -7,11 +7,12 @@
 <![endif]-->
 
 <!-- 上下文对象路径 -->
-<input type="hidden" id="hdnContextPath" name="hdnContextPath" value="http://localhost:8080/videos"/>
-<input type="hidden" id="apiServer" name="apiServer" value="http://localhost:8080/videos"/>
-<input type="hidden" id="bgmServer" name="bgmServer" value="http://localhost:8080/videos"/>
-<!-- <input type="hidden" id="apiServer" name="apiServer" value="http://imoocdsp.com/imooc-video-mini-api"/> -->
-<!-- <input type="hidden" id="bgmServer" name="bgmServer" value="http://118.24.157.179/mvc"/> -->
+<#--<input type="hidden" id="hdnContextPath" name="hdnContextPath" value="http://localhost:8080/videos"/>-->
+<#--<input type="hidden" id="apiServer" name="apiServer" value="http://localhost:8080/videos"/>-->
+<#--<input type="hidden" id="bgmServer" name="bgmServer" value="http://localhost:8080/videos"/>-->
+<input type="hidden" id="hdnContextPath" name="hdnContextPath" value="http://videos.wxsell.top/videos"/>
+<input type="hidden" id="apiServer" name="apiServer" value="http://videos.wxsell.top/videos"/>
+<input type="hidden" id="bgmServer" name="bgmServer" value="http://videos.wxsell.top/videos"/>
 
 
 
