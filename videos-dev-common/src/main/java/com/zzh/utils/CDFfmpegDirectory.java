@@ -15,8 +15,9 @@ public class CDFfmpegDirectory {
     public static void getCover() throws IOException {
         List<String> command = new java.util.ArrayList<>();
         //cd /developer/ffmpeg/bin
+        command.add("bash");
+        command.add("-c");
         command.add("cd");
-
         command.add("/developer/ffmpeg/bin");
 
         for (String c : command) {
