@@ -76,17 +76,16 @@ public class VideoController extends BasicController {
 
                 String fileName = file.getOriginalFilename();
                 // abc.mp4
-                String arrayFilenameItem[] =  fileName.split("\\.");
-                String fileNamePrefix = "";
-                for (int i = 0 ; i < arrayFilenameItem.length-1 ; i ++) {
-                    fileNamePrefix += arrayFilenameItem[i];
-                }
-                // fix bug: 解决小程序端OK，PC端不OK的bug，原因：PC端和小程序端对临时视频的命名不同
-//                if (StringUtils.isNotBlank(fileNamePrefix)) {
-//                    fileNamePrefix = fileName.split("\\.")[0];
+//                String arrayFilenameItem[] =  fileName.split("\\.");
+//                String fileNamePrefix = "";
+//                for (int i = 0 ; i < arrayFilenameItem.length-1 ; i ++) {
+//                    fileNamePrefix += arrayFilenameItem[i];
 //                }
+                // fix bug: 解决小程序端OK，PC端不OK的bug，原因：PC端和小程序端对临时视频的命名不同
+
                 if (StringUtils.isNotBlank(fileName)) {
 
+                    String fileNamePrefix = fileName.split("\\.")[0];
                     finalVideoPath = FILE_SPACE + uploadPathDB + "/" + fileName;
                     // 设置数据库保存的路径
                     uploadPathDB += ("/" + fileName);
