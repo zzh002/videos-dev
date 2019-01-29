@@ -121,8 +121,6 @@ public class VideoController extends BasicController {
             Bgm bgm = bgmService.queryBgmById(bgmId);
             String mp3InputPath = FILE_SPACE + bgm.getPath();
 
-            //云服务器端进入ffmpeg运行目录
-            CDFfmpegDirectory.getCover();
 
             //截取上传视频
             ExtractVideo extractVideo = new ExtractVideo(FFMPEG_EXE);

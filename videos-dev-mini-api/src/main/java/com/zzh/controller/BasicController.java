@@ -18,7 +18,7 @@ public class BasicController {
 
 	// ffmpeg所在目录
 //	public static final String FFMPEG_EXE = "D:/ffmpeg/bin/ffmpeg.exe";
-	public static final String FFMPEG_EXE = "./ffmpeg";
+	public static final String FFMPEG_EXE = "/developer/ffmpeg/bin/./ffmpeg";
 
 //	// 每页分页的记录数
 	public static final Integer PAGE_SIZE = 5;
