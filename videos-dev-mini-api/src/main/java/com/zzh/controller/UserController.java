@@ -6,9 +6,6 @@ import com.zzh.pojo.vo.PublisherVideo;
 import com.zzh.pojo.vo.UsersVO;
 import com.zzh.service.UserService;
 import com.zzh.utils.JSONResult;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -25,16 +22,12 @@ import java.io.InputStream;
  * @date 2019/1/8 14:44
  **/
 @RestController
-@Api(value="用户相关业务的接口", tags= {"用户相关业务的controller"})
 @RequestMapping("/user")
 public class UserController extends BasicController{
 
     @Autowired
     private UserService userService;
 
-    @ApiOperation(value="用户上传头像", notes="用户上传头像的接口")
-    @ApiImplicitParam(name="userId", value="用户id", required=true,
-            dataType="String", paramType="query")
     @PostMapping("/uploadFace")
     public JSONResult uploadFace(String userId,
                                  @RequestParam("file") MultipartFile[] files) throws Exception {
@@ -92,9 +85,6 @@ public class UserController extends BasicController{
         return JSONResult.ok(uploadPathDB);
     }
 
-    @ApiOperation(value="查询用户信息", notes="查询用户信息的接口")
-    @ApiImplicitParam(name="userId", value="用户id", required=true,
-            dataType="String", paramType="query")
     @PostMapping("/query")
     public JSONResult query(String userId, String fanId){
 

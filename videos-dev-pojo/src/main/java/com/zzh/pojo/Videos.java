@@ -63,9 +63,23 @@ public class Videos {
     private Long likeCounts;
 
     /**
+     * 评论的数量
+     */
+    @Column(name = "comment_counts")
+    private Long commentCounts;
+
+    public Long getCommentCounts() {
+        return commentCounts;
+    }
+
+    public void setCommentCounts(Long commentCounts) {
+        this.commentCounts = commentCounts;
+    }
+
+    /**
      * 视频状态：
-1、发布成功
-2、禁止播放，管理员操作
+    1、发布成功
+    2、禁止播放，管理员操作
      */
     private Integer status;
 

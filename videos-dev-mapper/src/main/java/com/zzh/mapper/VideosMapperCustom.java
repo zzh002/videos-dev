@@ -34,4 +34,9 @@ public interface VideosMapperCustom extends MyMapper<Videos> {
 	 * @Description: 对视频喜欢的数量进行累减
 	 */
 	void reduceVideoLikeCount(String videoId);
+
+	/**
+	 * @Description: 对视频的评论数量进行累加
+	 */
+	void addVideoCommentCount(String videoId);
 }

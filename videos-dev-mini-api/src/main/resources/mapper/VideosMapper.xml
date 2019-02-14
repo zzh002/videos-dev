@@ -15,6 +15,7 @@
     <result column="video_height" property="videoHeight" jdbcType="INTEGER" />
     <result column="cover_path" property="coverPath" jdbcType="VARCHAR" />
     <result column="like_counts" property="likeCounts" jdbcType="BIGINT" />
+    <result column="comment_counts" property="commentCounts" jdbcType="BIGINT" />
     <result column="status" property="status" jdbcType="INTEGER" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
   </resultMap>

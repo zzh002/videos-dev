@@ -191,10 +191,13 @@ public class VideoServiceImpl implements VideoService {
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
     public void saveComment(Comments comment) {
+        //保存评论
         String id = KeyUtils.genUniqueKey();
         comment.setId(id);
         comment.setCreateTime(new Date());
         commentsMapper.insert(comment);
+        //修改视频的评论数
+        videosMapperCustom.addVideoCommentCount(comment.getVideoId());
     }
 
     @Transactional(propagation = Propagation.SUPPORTS)

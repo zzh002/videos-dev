@@ -13,6 +13,16 @@ public class VideosVO {
     private Integer videoHeight;
     private String coverPath;
     private Long likeCounts;
+    private Long commentCounts;
+
+    public Long getCommentCounts() {
+        return commentCounts;
+    }
+
+    public void setCommentCounts(Long commentCounts) {
+        this.commentCounts = commentCounts;
+    }
+
     private Integer status;
     private Date createTime;
 

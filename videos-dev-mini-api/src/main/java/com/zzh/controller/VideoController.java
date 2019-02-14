@@ -7,7 +7,6 @@ import com.zzh.pojo.Videos;
 import com.zzh.service.BgmService;
 import com.zzh.service.VideoService;
 import com.zzh.utils.*;
-import io.swagger.annotations.*;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +22,9 @@ import java.util.UUID;
 /**
  * @author ZZH
  * @date 2019/1/9 13:59
+ * 视频API
  **/
 @RestController
-@Api(value="视频相关业务的接口", tags= {"视频相关业务的controller"})
 @RequestMapping("/video")
 public class VideoController extends BasicController {
 
@@ -35,29 +34,24 @@ public class VideoController extends BasicController {
     @Autowired
     VideoService videoService;
 
-
-    @ApiOperation(value="上传视频", notes="上传视频的接口")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name="userId", value="用户id", required=true,
-                    dataType="String", paramType="form"),
-            @ApiImplicitParam(name="bgmId", value="背景音乐id", required=false,
-                    dataType="String", paramType="form"),
-            @ApiImplicitParam(name="videoSeconds", value="背景音乐播放长度", required=true,
-                    dataType="String", paramType="form"),
-            @ApiImplicitParam(name="videoWidth", value="视频宽度", required=true,
-                    dataType="String", paramType="form"),
-            @ApiImplicitParam(name="videoHeight", value="视频高度", required=true,
-                    dataType="String", paramType="form"),
-            @ApiImplicitParam(name="desc", value="视频描述", required=false,
-                    dataType="String", paramType="form")
-    })
+    /**
+     * 上传视频
+     * @param userId
+     * @param bgmId
+     * @param videoSeconds
+     * @param videoWidth
+     * @param videoHeight
+     * @param desc
+     * @param file
+     * @return
+     * @throws Exception
+     */
     @PostMapping(value="/upload", headers="content-type=multipart/form-data")
     public JSONResult upload(String userId,
                              String bgmId, double videoSeconds,
                              int videoWidth, int videoHeight,
                              String desc,
-                             @ApiParam(value="短视频", required=true)
-                                         MultipartFile file) throws Exception {
+                             MultipartFile file) throws Exception {
 
         if (StringUtils.isBlank(userId)) {
             return JSONResult.errorMsg("用户id不能为空...");
@@ -164,18 +158,18 @@ public class VideoController extends BasicController {
 
     }
 
-    @ApiOperation(value="上传封面", notes="上传封面的接口")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name="userId", value="用户id", required=true,
-                    dataType="String", paramType="form"),
-            @ApiImplicitParam(name="videoId", value="视频主键id", required=true,
-                    dataType="String", paramType="form")
-    })
+    /**
+     * 上传视频封面
+     * @param userId
+     * @param videoId
+     * @param file
+     * @return
+     * @throws Exception
+     */
     @PostMapping(value="/uploadCover", headers="content-type=multipart/form-data")
     public JSONResult uploadCover(String userId,
                                        String videoId,
-                                       @ApiParam(value="视频封面", required=true)
-                                               MultipartFile file) throws Exception {
+                                       MultipartFile file) throws Exception {
 
         if (StringUtils.isBlank(videoId) || StringUtils.isBlank(userId)) {
             return JSONResult.errorMsg("视频主键id和用户id不能为空...");
@@ -295,7 +289,7 @@ public class VideoController extends BasicController {
     }
 
     /**
-     * 热搜次查询
+     * 热搜查询
      * @return
      */
     @PostMapping(value="/hot")
@@ -303,18 +297,40 @@ public class VideoController extends BasicController {
         return JSONResult.ok(videoService.getHotwords());
     }
 
+    /**
+     * 用户喜欢的视频
+     * @param userId
+     * @param videoId
+     * @param videoCreaterId
+     * @return
+     */
     @PostMapping(value="/userLike")
     public JSONResult userLike(String userId, String videoId, String videoCreaterId) {
         videoService.userLikeVideo(userId, videoId, videoCreaterId);
         return JSONResult.ok();
     }
 
+    /**
+     * 用户不喜欢的视频
+     * @param userId
+     * @param videoId
+     * @param videoCreaterId
+     * @return
+     */
     @PostMapping(value="/userUnLike")
     public JSONResult userUnLike(String userId, String videoId, String videoCreaterId) {
         videoService.userUnLikeVideo(userId, videoId, videoCreaterId);
         return JSONResult.ok();
     }
 
+    /**
+     * 保存评论
+     * @param comment
+     * @param fatherCommentId
+     * @param toUserId
+     * @return
+     * @throws Exception
+     */
     @PostMapping("/saveComment")
     public JSONResult saveComment(@RequestBody Comments comment,
                                        String fatherCommentId, String toUserId) throws Exception {
@@ -326,6 +342,14 @@ public class VideoController extends BasicController {
         return JSONResult.ok();
     }
 
+    /**
+     * 获取视频评论
+     * @param videoId
+     * @param page
+     * @param pageSize
+     * @return
+     * @throws Exception
+     */
     @PostMapping("/getVideoComments")
     public JSONResult getVideoComments(String videoId, Integer page, Integer pageSize) throws Exception {
 

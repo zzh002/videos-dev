@@ -5,9 +5,6 @@ import com.zzh.pojo.vo.UsersVO;
 import com.zzh.service.UserService;
 import com.zzh.utils.JSONResult;
 import com.zzh.utils.MD5Utils;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +19,11 @@ import java.util.UUID;
  * @date 2019/1/7 11:20
  **/
 @RestController
-@Api(value="用户注册登录的接口", tags= {"注册和登录的controller"})
 public class RegistLoginController extends BasicController {
 
     @Autowired
     private UserService userService;
 
-    @ApiOperation(value="用户注册", notes="用户注册的接口")
     @PostMapping("/regist")
     public JSONResult regist(@RequestBody Users user) throws Exception {
 
@@ -60,7 +55,6 @@ public class RegistLoginController extends BasicController {
         return JSONResult.ok(userVO);
     }
 
-    @ApiOperation(value="用户登录", notes="用户登录的接口")
     @PostMapping("/login")
     public JSONResult login(@RequestBody Users user) throws Exception {
         String username = user.getUsername();
@@ -87,9 +81,6 @@ public class RegistLoginController extends BasicController {
         }
     }
 
-    @ApiOperation(value="用户注销", notes="用户注销的接口")
-    @ApiImplicitParam(name="userId", value="用户id", required=true,
-            dataType="String", paramType="query")
     @PostMapping("/logout")
     public JSONResult logout(String userId){
         redis.del(USER_REDIS_SESSION + ":" + userId);
