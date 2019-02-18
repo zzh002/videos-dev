@@ -50,7 +50,7 @@
 				    
 				    	<div class="page-content-body">
 				    	
-					        <#include "imooc.ftl">
+					        <#--<#include "imooc.ftl">-->
 					        
 				        </div>
 				        

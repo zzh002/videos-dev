@@ -39,11 +39,21 @@ public class AdminController extends BasicController {
     @Autowired
     private VideoService videoService;
 
+    /**
+     * 后台-主页
+     * @param map
+     * @return
+     */
     @RequestMapping("/menu")
     public ModelAndView menu(Map<String, Object> map) {
         return new ModelAndView("center", map);
     }
 
+    /**
+     * 后台-登录
+     * @param map
+     * @return
+     */
     @RequestMapping("/login")
     public ModelAndView login(Map<String, Object> map) {
         String url = projectUrlConfig.getUrl();
@@ -51,6 +61,13 @@ public class AdminController extends BasicController {
         return new ModelAndView("login", map);
     }
 
+    /**
+     * 后台-检查登陆
+     * @param username
+     * @param password
+     * @param request
+     * @return
+     */
     @PostMapping("/loginCheckout")
     @ResponseBody
     public JSONResult loginCheckout(String username, String password,
@@ -68,6 +85,12 @@ public class AdminController extends BasicController {
         return JSONResult.errorMsg("登陆失败，请重试...");
     }
 
+    /**
+     * 后台-注销登录
+     * @param map
+     * @param request
+     * @return
+     */
     @RequestMapping("/logout")
     public ModelAndView logout(Map<String, Object> map,
                                HttpServletRequest request) {
@@ -77,12 +100,22 @@ public class AdminController extends BasicController {
         return new ModelAndView("login", map);
     }
 
+    /**
+     *后台-举报信息列表界面
+     * @param map
+     * @return
+     */
     @GetMapping("/showReportList")
     public ModelAndView showReportList(Map<String, Object> map) {
 
         return new ModelAndView("video/reportList", map);
     }
 
+    /**
+     * 后台-举报信息列表
+     * @param page
+     * @return
+     */
     @PostMapping("/reportList")
     @ResponseBody
     public PagedResult reportList(Integer page) {
@@ -91,6 +124,11 @@ public class AdminController extends BasicController {
         return result;
     }
 
+    /**
+     * 后台-禁播视频
+     * @param videoId
+     * @return
+     */
     @PostMapping("/forbidVideo")
     @ResponseBody
     public JSONResult forbidVideo(String videoId) {
@@ -99,6 +137,11 @@ public class AdminController extends BasicController {
         return JSONResult.ok();
     }
 
+    /**
+     * 后台-解禁视频
+     * @param videoId
+     * @return
+     */
     @PostMapping("/openVideo")
     @ResponseBody
     public JSONResult openVideo(String videoId) {
@@ -107,17 +150,32 @@ public class AdminController extends BasicController {
         return JSONResult.ok();
     }
 
+    /**
+     * 后台-bgm列表界面
+     * @param map
+     * @return
+     */
     @GetMapping("/showBgmList")
     public ModelAndView showBgmList(Map<String, Object> map) {
         return new ModelAndView("video/bgmList",map);
     }
 
+    /**
+     * 后台-查询bgm列表
+     * @param page
+     * @return
+     */
     @PostMapping("/queryBgmList")
     @ResponseBody
     public PagedResult queryBgmList(Integer page) {
         return videoService.queryBgmList(page, 10);
     }
 
+    /**
+     * 后台-增加bgm界面
+     * @param map
+     * @return
+     */
     @GetMapping("/showAddBgm")
     public ModelAndView showAddBgm(Map<String, Object> map) {
         String url = projectUrlConfig.getUrl();
@@ -125,6 +183,11 @@ public class AdminController extends BasicController {
         return new ModelAndView("video/addBgm",map);
     }
 
+    /**
+     * 后台-增加bgm
+     * @param bgm
+     * @return
+     */
     @PostMapping("/addBgm")
     @ResponseBody
     public JSONResult addBgm(Bgm bgm) {
@@ -133,6 +196,11 @@ public class AdminController extends BasicController {
         return JSONResult.ok();
     }
 
+    /**
+     * 后台-删除bgm
+     * @param bgmId
+     * @return
+     */
     @PostMapping("/delBgm")
     @ResponseBody
     public JSONResult delBgm(String bgmId) {
@@ -140,6 +208,12 @@ public class AdminController extends BasicController {
         return JSONResult.ok();
     }
 
+    /**
+     * 后台-上传bgm
+     * @param files
+     * @return
+     * @throws Exception
+     */
     @PostMapping("/bgmUpload")
     @ResponseBody
     public JSONResult bgmUpload(@RequestParam("file") MultipartFile[] files) throws Exception {
@@ -188,14 +262,22 @@ public class AdminController extends BasicController {
         return JSONResult.ok(uploadPathDB);
     }
 
-
-
+    /**
+     * 后台-用户列表界面
+     * @param map
+     * @return
+     */
     @GetMapping("/showUserList")
     public ModelAndView showUserList(Map<String, Object> map) {
         return new ModelAndView("users/usersList",map);
     }
 
-
+    /**
+     * 后台-获取用户列表
+     * @param user
+     * @param page
+     * @return
+     */
     @PostMapping("/userlist")
     @ResponseBody
     public PagedResult userlist(Users user , Integer page) {

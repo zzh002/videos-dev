@@ -26,6 +26,15 @@ public class Comments {
     @Column(name = "from_user_id")
     private String fromUserId;
 
+
+
+    /**
+     * 点赞数
+     */
+    @Column(name = "like_counts")
+    private Long likeCounts;
+
+
     @Column(name = "create_time")
     private Date createTime;
 
@@ -124,6 +133,14 @@ public class Comments {
      */
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public Long getLikeCounts() {
+        return likeCounts;
+    }
+
+    public void setLikeCounts(Long likeCounts) {
+        this.likeCounts = likeCounts;
     }
 
     /**

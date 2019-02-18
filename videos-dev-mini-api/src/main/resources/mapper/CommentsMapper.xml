@@ -10,6 +10,7 @@
     <result column="to_user_id" property="toUserId" jdbcType="VARCHAR" />
     <result column="video_id" property="videoId" jdbcType="VARCHAR" />
     <result column="from_user_id" property="fromUserId" jdbcType="VARCHAR" />
+    <result column="like_counts" property="likeCounts" jdbcType="BIGINT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="comment" property="comment" jdbcType="LONGVARCHAR" />
   </resultMap>

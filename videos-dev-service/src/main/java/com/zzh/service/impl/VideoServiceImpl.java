@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.zzh.enums.BGMOperatorTypeEnum;
 import com.zzh.mapper.*;
 import com.zzh.pojo.*;
+import com.zzh.pojo.vo.CommentDetail;
 import com.zzh.pojo.vo.CommentsVO;
 import com.zzh.pojo.vo.Reports;
 import com.zzh.pojo.vo.VideosVO;
@@ -12,16 +13,17 @@ import com.zzh.service.VideoService;
 import com.zzh.utils.KeyUtils;
 import com.zzh.utils.PagedResult;
 import com.zzh.utils.TimeAgoUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.Set;
+
+
 import tk.mybatis.mapper.entity.Example;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author ZZH
@@ -206,22 +208,57 @@ public class VideoServiceImpl implements VideoService {
 
         PageHelper.startPage(page, pageSize);
 
-        List<CommentsVO> list = commentsMapperCustom.queryComments(videoId);
+        List<CommentDetail> list = commentsMapperCustom.queryFatherComments(videoId);
 
-        for (CommentsVO c : list) {
+        List<CommentsVO> commentsVOList = new ArrayList<>();
+
+
+
+
+        for (CommentDetail c : list) {
             String timeAgo = TimeAgoUtils.format(c.getCreateTime());
             c.setTimeAgoStr(timeAgo);
+            CommentsVO commentsVO = new CommentsVO();
+            BeanUtils.copyProperties(c, commentsVO);
+            Set<CommentDetail> commentSet = new HashSet<>();
+            findChildComments(commentSet,commentsVO.getId());
+            List<CommentDetail> commentDetailList = new ArrayList<>();
+            if (commentSet != null) {
+                for (CommentDetail commentDetail : commentSet) {
+                    if (!c.getId().equals(commentDetail.getId())) {
+                        commentDetailList.add(commentDetail);
+                    }
+                }
+            }
+            commentsVO.setCommentDetailList(commentDetailList);
+            commentsVOList.add(commentsVO);
         }
 
-        PageInfo<CommentsVO> pageList = new PageInfo<>(list);
+        PageInfo<CommentDetail> pageList = new PageInfo<>(list);
 
         PagedResult grid = new PagedResult();
         grid.setTotal(pageList.getPages());
-        grid.setRows(list);
+        grid.setRows(commentsVOList);
         grid.setPage(page);
         grid.setRecords(pageList.getTotal());
 
         return grid;
+    }
+
+    //递归算法,算出子节点
+    private Set<CommentDetail> findChildComments(Set<CommentDetail> commentSet ,String commentId){
+        CommentDetail commentDetail = commentsMapperCustom.slectCommentDetailByPrimary(commentId);
+        if(commentDetail != null){
+            String timeAgo = TimeAgoUtils.format(commentDetail.getCreateTime());
+            commentDetail.setTimeAgoStr(timeAgo);
+            commentSet.add(commentDetail);
+        }
+        //查找子节点,递归算法一定要有一个退出的条件
+        List<CommentDetail> commentDetailList = commentsMapperCustom.queryChildComments(commentId);
+        for(CommentDetail item : commentDetailList){
+            findChildComments(commentSet,item.getId());
+        }
+        return commentSet;
     }
 
     @Override

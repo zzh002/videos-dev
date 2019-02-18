@@ -1,6 +1,7 @@
 package com.zzh.pojo.vo;
 
 import java.util.Date;
+import java.util.List;
 
 public class CommentsVO {
     private String id;
@@ -24,8 +25,9 @@ public class CommentsVO {
     
     private String faceImage;
     private String nickname;
-    private String toNickname;
+    private List<CommentDetail> commentDetailList;
     private String timeAgoStr;
+    private Long likeCounts;
     
 
     public String getTimeAgoStr() {
@@ -134,11 +136,19 @@ public class CommentsVO {
         this.comment = comment;
     }
 
-	public String getToNickname() {
-		return toNickname;
-	}
+    public List<CommentDetail> getCommentDetailList() {
+        return commentDetailList;
+    }
 
-	public void setToNickname(String toNickname) {
-		this.toNickname = toNickname;
-	}
+    public void setCommentDetailList(List<CommentDetail> commentDetailList) {
+        this.commentDetailList = commentDetailList;
+    }
+
+    public Long getLikeCounts() {
+        return likeCounts;
+    }
+
+    public void setLikeCounts(Long likeCounts) {
+        this.likeCounts = likeCounts;
+    }
 }
