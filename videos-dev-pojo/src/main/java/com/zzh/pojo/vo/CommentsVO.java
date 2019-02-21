@@ -28,7 +28,15 @@ public class CommentsVO {
     private List<CommentDetail> commentDetailList;
     private String timeAgoStr;
     private Long likeCounts;
-    
+    private Boolean isPraise;
+
+    public Boolean getIsPraise() {
+        return isPraise;
+    }
+
+    public void setIsPraise(Boolean praise) {
+        isPraise = praise;
+    }
 
     public String getTimeAgoStr() {
 		return timeAgoStr;

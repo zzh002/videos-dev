@@ -2,14 +2,8 @@ package com.zzh.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.zzh.mapper.UsersFansMapper;
-import com.zzh.mapper.UsersLikeVideosMapper;
-import com.zzh.mapper.UsersMapper;
-import com.zzh.mapper.UsersReportMapper;
-import com.zzh.pojo.Users;
-import com.zzh.pojo.UsersFans;
-import com.zzh.pojo.UsersLikeVideos;
-import com.zzh.pojo.UsersReport;
+import com.zzh.mapper.*;
+import com.zzh.pojo.*;
 import com.zzh.service.UserService;
 import com.zzh.utils.KeyUtils;
 import com.zzh.utils.PagedResult;
@@ -42,6 +36,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UsersReportMapper usersReportMapper;
+
+    @Autowired
+    private UsersLikeCommentsMapper usersLikeCommentsMapper;
 
 
     @Transactional(propagation = Propagation.SUPPORTS)
@@ -114,6 +111,28 @@ public class UserServiceImpl implements UserService {
         criteria.andEqualTo("videoId", videoId);
 
         List<UsersLikeVideos> list = usersLikeVideosMapper.selectByExample(example);
+
+        if (list != null && list.size() >0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public boolean isUserLikeComments(String userId, String commentId) {
+        if (StringUtils.isBlank(userId) || StringUtils.isBlank(commentId)) {
+            return false;
+        }
+
+        Example example = new Example(UsersLikeComments.class);
+        Example.Criteria criteria = example.createCriteria();
+
+        criteria.andEqualTo("userId", userId);
+        criteria.andEqualTo("commentId", commentId);
+
+        List<UsersLikeComments> list = usersLikeCommentsMapper.selectByExample(example);
 
         if (list != null && list.size() >0) {
             return true;

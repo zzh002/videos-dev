@@ -228,7 +228,8 @@ public class VideoController extends BasicController {
      * 				 0 - 不需要保存 ，或者为空的时候
      */
     @PostMapping(value="/showAll")
-    public JSONResult showAll(@RequestBody Videos video, Integer isSaveRecord,
+    public JSONResult showAll(@RequestBody Videos video, String loginUserId,
+                              Integer isSaveRecord,
                               Integer page,
                               Integer pageSize) {
 
@@ -240,7 +241,7 @@ public class VideoController extends BasicController {
             pageSize = PAGE_SIZE;
         }
 
-        PagedResult result = videoService.getAllVideos(video, isSaveRecord, page, pageSize);
+        PagedResult result = videoService.getAllVideos(video, isSaveRecord, loginUserId, page, pageSize);
         return JSONResult.ok(result);
     }
 
@@ -337,6 +338,7 @@ public class VideoController extends BasicController {
 
         comment.setFatherCommentId(fatherCommentId);
         comment.setToUserId(toUserId);
+        comment.setLikeCounts(Long.valueOf(0));
 
         videoService.saveComment(comment);
         return JSONResult.ok();
@@ -345,13 +347,15 @@ public class VideoController extends BasicController {
     /**
      * 获取视频评论
      * @param videoId
+     * @param loginUserId
      * @param page
      * @param pageSize
      * @return
      * @throws Exception
      */
     @PostMapping("/getVideoComments")
-    public JSONResult getVideoComments(String videoId, Integer page, Integer pageSize) throws Exception {
+    public JSONResult getVideoComments(String videoId, String loginUserId,
+                                       Integer page, Integer pageSize)  {
 
         if (StringUtils.isBlank(videoId)) {
             return JSONResult.ok();
@@ -366,8 +370,32 @@ public class VideoController extends BasicController {
             pageSize = 10;
         }
 
-        PagedResult list = videoService.getAllComments(videoId, page, pageSize);
+        PagedResult list = videoService.getAllComments(videoId,loginUserId, page, pageSize);
 
         return JSONResult.ok(list);
+    }
+
+    /**
+     * 点赞评论
+     * @param userId
+     * @param commentId
+     * @return
+     */
+    @PostMapping("/likeComment")
+    public JSONResult likeComment(String userId, String commentId) {
+        videoService.likeComment(userId,commentId);
+        return JSONResult.ok();
+    }
+
+    /**
+     * 取消点赞评论
+     * @param userId
+     * @param commentId
+     * @return
+     */
+    @PostMapping("/unlikeComment")
+    public JSONResult unlikeComment(String userId, String commentId) {
+        videoService.unlikeComment(userId,commentId);
+        return JSONResult.ok();
     }
 }

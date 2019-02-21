@@ -8,6 +8,7 @@
     <id column="id" property="id" jdbcType="VARCHAR" />
     <result column="video_id" property="videoId" jdbcType="VARCHAR" />
     <result column="from_user_id" property="fromUserId" jdbcType="VARCHAR" />
+    <result column="father_comment_id" property="fatherCommentId" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="comment" property="comment" jdbcType="LONGVARCHAR" />
     <result column="face_image" property="faceImage" jdbcType="VARCHAR" />
@@ -23,7 +24,7 @@
 	from comments c
 	left join users u on c.from_user_id = u.id
 	left join users tu on c.to_user_id = tu.id
-  	where c.video_id = #{videoId} and (c.father_comment_id is null or c.father_comment_id = 'undefined')
+  	where c.video_id = #{videoId} and (c.father_comment_id is null or c.father_comment_id = 'undefined' or c.father_comment_id = '')
   	order by c.create_time desc
   </select>
 
@@ -43,5 +44,13 @@
         left join users tu on c.to_user_id = tu.id
         where c.id = #{id}
     </select>
+
+    <update id="addCommentsLikeCount" parameterType="String">
+        update comments set like_counts=like_counts+1 where id=#{commentId}
+    </update>
+
+    <update id="reduceCommentsLikeCount" parameterType="String">
+        update comments set like_counts=like_counts-1 where id=#{commentId}
+    </update>
   
 </mapper>

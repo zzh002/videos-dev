@@ -37,6 +37,11 @@ public interface UserService {
     boolean isUserLikeVideo(String userId, String videoId);
 
     /**
+     * @Description: 查询用户是否点赞评论
+     */
+    boolean isUserLikeComments(String userId, String commentId);
+
+    /**
      * @Description: 增加用户和粉丝的关系
      */
     void saveUserFanRelation(String userId, String fanId);

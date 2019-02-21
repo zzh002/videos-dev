@@ -9,6 +9,7 @@ import com.zzh.pojo.vo.CommentDetail;
 import com.zzh.pojo.vo.CommentsVO;
 import com.zzh.pojo.vo.Reports;
 import com.zzh.pojo.vo.VideosVO;
+import com.zzh.service.UserService;
 import com.zzh.service.VideoService;
 import com.zzh.utils.KeyUtils;
 import com.zzh.utils.PagedResult;
@@ -59,6 +60,12 @@ public class VideoServiceImpl implements VideoService {
     @Autowired
     private BgmMapper bgmMapper;
 
+    @Autowired
+    private UsersLikeCommentsMapper usersLikeCommentsMapper;
+
+    @Autowired
+    private UserService userService;
+
 
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
@@ -83,7 +90,7 @@ public class VideoServiceImpl implements VideoService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
-    public PagedResult getAllVideos(Videos video, Integer isSaveRecord,
+    public PagedResult getAllVideos(Videos video, Integer isSaveRecord, String loginUserId,
                                     Integer page, Integer pageSize) {
 
         // 保存热搜词
@@ -99,6 +106,10 @@ public class VideoServiceImpl implements VideoService {
 
         PageHelper.startPage(page, pageSize);
         List<VideosVO> list = videosMapperCustom.queryAllVideos(desc,userId);
+        //查询登录用户是否点赞该视频
+        for (VideosVO videosVO : list) {
+            videosVO.setIsPraise(userService.isUserLikeVideo(loginUserId, videosVO.getId()));
+        }
 
         PageInfo<VideosVO> pageList = new PageInfo<>(list);
 
@@ -199,12 +210,49 @@ public class VideoServiceImpl implements VideoService {
         comment.setCreateTime(new Date());
         commentsMapper.insert(comment);
         //修改视频的评论数
-        videosMapperCustom.addVideoCommentCount(comment.getVideoId());
+        if (comment.getFatherCommentId().equals("undefined")) {
+            videosMapperCustom.addVideoCommentCount(comment.getVideoId());
+        }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    @Override
+    public void likeComment(String userId, String commentId) {
+        //判断是否存在点赞关系
+        UsersLikeComments ulc = new UsersLikeComments();
+        ulc.setUserId(userId);
+        ulc.setCommentId(commentId);
+        int count  = usersLikeCommentsMapper.selectCount(ulc);
+        if (count > 0) {
+            return;
+        }
+        //添加点赞关系
+        String id = KeyUtils.genUniqueKey();
+        ulc.setId(id);
+        usersLikeCommentsMapper.insert(ulc);
+        //累加点赞数量
+        commentsMapperCustom.addCommentsLikeCount(commentId);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    @Override
+    public void unlikeComment(String userId, String commentId) {
+        // 1. 删除用户和评论的喜欢点赞关联关系表
+
+        Example example = new Example(UsersLikeComments.class);
+        Example.Criteria criteria = example.createCriteria();
+
+        criteria.andEqualTo("userId", userId);
+        criteria.andEqualTo("commentId", commentId);
+
+        usersLikeCommentsMapper.deleteByExample(example);
+        //累加点赞数量
+        commentsMapperCustom.reduceCommentsLikeCount(commentId);
     }
 
     @Transactional(propagation = Propagation.SUPPORTS)
     @Override
-    public PagedResult getAllComments(String videoId, Integer page, Integer pageSize) {
+    public PagedResult getAllComments(String videoId, String loginUserId, Integer page, Integer pageSize) {
 
         PageHelper.startPage(page, pageSize);
 
@@ -212,20 +260,19 @@ public class VideoServiceImpl implements VideoService {
 
         List<CommentsVO> commentsVOList = new ArrayList<>();
 
-
-
-
         for (CommentDetail c : list) {
             String timeAgo = TimeAgoUtils.format(c.getCreateTime());
             c.setTimeAgoStr(timeAgo);
             CommentsVO commentsVO = new CommentsVO();
             BeanUtils.copyProperties(c, commentsVO);
+            commentsVO.setIsPraise(userService.isUserLikeComments(loginUserId,commentsVO.getId()));
             Set<CommentDetail> commentSet = new HashSet<>();
             findChildComments(commentSet,commentsVO.getId());
             List<CommentDetail> commentDetailList = new ArrayList<>();
             if (commentSet != null) {
                 for (CommentDetail commentDetail : commentSet) {
                     if (!c.getId().equals(commentDetail.getId())) {
+                        commentDetail.setIsPraise(userService.isUserLikeComments(loginUserId,commentDetail.getId()));
                         commentDetailList.add(commentDetail);
                     }
                 }

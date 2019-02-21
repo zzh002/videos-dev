@@ -14,6 +14,8 @@ public class CommentDetail {
 
     private String fromUserId;
 
+    private String fatherCommentId;
+
     private Date createTime;
 
     private String comment;
@@ -23,6 +25,15 @@ public class CommentDetail {
     private String toNickname;
     private String timeAgoStr;
     private Long likeCounts;
+    private Boolean isPraise;
+
+    public Boolean getIsPraise() {
+        return isPraise;
+    }
+
+    public void setIsPraise(Boolean praise) {
+        isPraise = praise;
+    }
 
     public String getId() {
         return id;
@@ -38,6 +49,14 @@ public class CommentDetail {
 
     public void setVideoId(String videoId) {
         this.videoId = videoId;
+    }
+
+    public String getFatherCommentId() {
+        return fatherCommentId;
+    }
+
+    public void setFatherCommentId(String fatherCommentId) {
+        this.fatherCommentId = fatherCommentId;
     }
 
     public String getFromUserId() {

@@ -25,7 +25,7 @@ public interface VideoService {
     /**
      * @Description: 分页查询视频列表
      */
-    PagedResult getAllVideos(Videos video, Integer isSaveRecord,
+    PagedResult getAllVideos(Videos video, Integer isSaveRecord, String loginUserId,
                              Integer page, Integer pageSize);
 
     /**
@@ -58,10 +58,14 @@ public interface VideoService {
      */
     void saveComment(Comments comment);
 
+    void likeComment(String userId, String commentId);
+
+    void unlikeComment(String userId, String commentId);
+
     /**
      * @Description: 留言分页
      */
-    PagedResult getAllComments(String videoId, Integer page, Integer pageSize);
+    PagedResult getAllComments(String videoId,String loginUserId, Integer page, Integer pageSize);
 
     PagedResult queryReportList(Integer page, Integer pageSize);
 
@@ -72,4 +76,5 @@ public interface VideoService {
     void addBgm(Bgm bgm);
 
     void deleteBgm(String id);
+
 }

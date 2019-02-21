@@ -14,6 +14,15 @@ public class VideosVO {
     private String coverPath;
     private Long likeCounts;
     private Long commentCounts;
+    private Boolean isPraise;
+
+    public Boolean getIsPraise() {
+        return isPraise;
+    }
+
+    public void setIsPraise(Boolean isPraise) {
+        this.isPraise = isPraise;
+    }
 
     public Long getCommentCounts() {
         return commentCounts;

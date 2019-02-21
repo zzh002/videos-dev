@@ -14,4 +14,8 @@ public interface CommentsMapperCustom extends MyMapper<Comments> {
 	List<CommentDetail> queryChildComments(String fatherCommentId);
 
 	CommentDetail slectCommentDetailByPrimary(String id);
+
+	void addCommentsLikeCount(String commentId);
+
+	void reduceCommentsLikeCount(String commentId);
 }
