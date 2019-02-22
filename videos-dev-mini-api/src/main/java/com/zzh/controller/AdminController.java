@@ -1,6 +1,6 @@
 package com.zzh.controller;
 
-import com.zzh.config.ProjectUrlConfig;
+import com.zzh.config.ProjectConfig;
 import com.zzh.enums.VideoStatusEnum;
 import com.zzh.pojo.AdminUser;
 import com.zzh.pojo.Bgm;
@@ -33,7 +33,7 @@ import java.util.UUID;
 public class AdminController extends BasicController {
 
     @Autowired
-    ProjectUrlConfig projectUrlConfig;
+    ProjectConfig projectConfig;
     @Autowired
     private UserService usersService;
     @Autowired
@@ -56,7 +56,7 @@ public class AdminController extends BasicController {
      */
     @RequestMapping("/login")
     public ModelAndView login(Map<String, Object> map) {
-        String url = projectUrlConfig.getUrl();
+        String url = projectConfig.getUrl();
         map.put("url",url);
         return new ModelAndView("login", map);
     }
@@ -95,7 +95,7 @@ public class AdminController extends BasicController {
     public ModelAndView logout(Map<String, Object> map,
                                HttpServletRequest request) {
         request.getSession().removeAttribute("Admin-session");
-        String url = projectUrlConfig.getUrl();
+        String url = projectConfig.getUrl();
         map.put("url",url);
         return new ModelAndView("login", map);
     }
@@ -178,7 +178,7 @@ public class AdminController extends BasicController {
      */
     @GetMapping("/showAddBgm")
     public ModelAndView showAddBgm(Map<String, Object> map) {
-        String url = projectUrlConfig.getUrl();
+        String url = projectConfig.getUrl();
         map.put("url",url);
         return new ModelAndView("video/addBgm",map);
     }
