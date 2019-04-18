@@ -1,7 +1,7 @@
-// 定义举报列表对象
+// 定义用户列表对象
 var List = function () {
 	
-    // 举报列表
+    // 用户列表
 	var handleList = function() {
     	
 		// 上下文对象路径
@@ -15,21 +15,35 @@ var List = function () {
             mtype: "post",  
             styleUI: 'Bootstrap',//设置jqgrid的全局样式为bootstrap样式  
             datatype: "json",  
-            colNames: ['ID', '头像', '用户名', '昵称', '粉丝数', '关注数', '获赞数'],  
+            colNames: ['ID', '头像', '昵称', '性别', '国家', '省份', '城市', '粉丝数', '关注数', '获赞数'],
             colModel: [  
                 { name: 'id', index: 'id', width: 30, sortable: false, hidden: false },  
-                { name: 'faceImage', index: 'username', width: 50, sortable: false,
+                { name: 'faceImage', index: 'username', width: 30, sortable: false,
                 	formatter:function(cellvalue, options, rowObject) {
-                		var src = apiServer + cellvalue;
+                		var src = cellvalue;
                 		var img = "<img src='" + src + "' width='120'></img>"
 			    		return img;
 			    	}  
                 },
-                { name: 'username', index: 'password', width: 30, sortable: false },
                 { name: 'nickname', index: 'nickname', width: 30, sortable: false },
-                { name: 'fansCounts', index: 'age', width: 20, sortable: false },
-                { name: 'followCounts', index: 'sexValue', width: 20, sortable: false },
-                { name: 'receiveLikeCounts', index: 'province', width: 20, sortable: false, hidden: false }
+                { name: 'gender', index: 'gender', width: 30, sortable: false,
+                    formatter:function(cellvalue, options, rowObject) {
+                        var gender = "";
+                        if (cellvalue == 0)
+                            gender = "未知";
+                        else if (cellvalue == 1)
+                            gender = "男";
+                        else if (cellvalue == 2)
+                            gender = "女";
+                        return gender;
+                    }
+                },
+                { name: 'country', index: 'country', width: 20, sortable: false },
+                { name: 'province', index: 'province', width: 20, sortable: false },
+                { name: 'city', index: 'city', width: 20, sortable: false },
+                { name: 'fansCounts', index: 'fansCounts', width: 20, sortable: false },
+                { name: 'followCounts', index: 'followCounts', width: 20, sortable: false },
+                { name: 'receiveLikeCounts', index: 'receiveLikeCounts', width: 20, sortable: false, hidden: false }
             ],  
             viewrecords: true,  		// 定义是否要显示总记录数
             rowNum: 10,					// 在grid上显示记录条数，这个参数是要被传递到后台

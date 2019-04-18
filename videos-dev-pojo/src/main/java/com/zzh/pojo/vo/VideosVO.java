@@ -15,6 +15,29 @@ public class VideosVO {
     private Long likeCounts;
     private Long commentCounts;
     private Boolean isPraise;
+    private String author;
+    private String name;
+    private Integer status;
+    private Date createTime;
+
+    private String faceImage;
+    private String nickname;
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public Boolean getIsPraise() {
         return isPraise;
@@ -32,11 +55,7 @@ public class VideosVO {
         this.commentCounts = commentCounts;
     }
 
-    private Integer status;
-    private Date createTime;
 
-    private String faceImage;
-    private String nickname;
 
 	public String getFaceImage() {
 		return faceImage;

@@ -1,13 +1,21 @@
 package com.zzh.controller;
 
 import com.zzh.config.ProjectConfig;
+import com.zzh.pojo.Users;
+import com.zzh.pojo.vo.UsersVO;
+import com.zzh.service.UserService;
 import com.zzh.utils.AesCbcUtil;
 import com.zzh.utils.HttpRequest;
 import com.zzh.utils.JSONResult;
 import org.activiti.engine.impl.util.json.JSONObject;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.UUID;
 
 /**
  * @author ZZH
@@ -15,15 +23,16 @@ import org.springframework.web.bind.annotation.RestController;
  **/
 @RestController
 @RequestMapping("/wXLogin")
-public class WXLoginController {
+public class WXLoginController extends BasicController {
 
     @Autowired
     private ProjectConfig projectConfig;
 
+    @Autowired
+    private UserService userService;
+
     @RequestMapping("/decodeUserInfo")
     public JSONResult decodeUserInfo(String encryptedData, String iv, String code) {
-
-//        Map map = new HashMap();
 
         // 登录凭证不能为空
         if (code == null || code.length() == 0) {
@@ -50,33 +59,37 @@ public class WXLoginController {
         String session_key = json.get("session_key").toString();
         // 用户的唯一标识（openid）
         String openid = (String) json.get("openid");
+        if (StringUtils.isBlank(openid)) {
+            return JSONResult.errorMsg("登陆失败！");
+        }
+        Users user = userService.queryUserFromOpenid(openid);
+        if (user == null) {
+            user = new Users();
+            user.setOpenid(openid);
+            user = userService.saveUser(user);
+            if (user == null) {
+                return JSONResult.errorMsg("登陆失败！");
+            }
+        }
 
         //////////////// 2、对encryptedData加密数据进行AES解密 ////////////////
         try {
             String result = AesCbcUtil.decrypt(encryptedData, session_key, iv, "UTF-8");
             if (null != result && result.length() > 0) {
-
                 JSONObject userInfoJSON = new JSONObject(result);
-//                Map userInfo = new HashMap();
                 String nickname = (String) userInfoJSON.get("nickName");
                 Integer gender = (Integer) userInfoJSON.get("gender");
                 String city = (String) userInfoJSON.get("city");
                 String province = (String) userInfoJSON.get("province");
                 String country = (String) userInfoJSON.get("country");
                 String faceImage = (String) userInfoJSON.get("avatarUrl");
-
-//                userInfo.put("openId", userInfoJSON.get("openId"));
-//                userInfo.put("nickName", userInfoJSON.get("nickName"));
-//                userInfo.put("gender", userInfoJSON.get("gender"));
-//                userInfo.put("city", userInfoJSON.get("city"));
-//                userInfo.put("province", userInfoJSON.get("province"));
-//                userInfo.put("country", userInfoJSON.get("country"));
-//                userInfo.put("avatarUrl", userInfoJSON.get("avatarUrl"));
-//                // 解密unionId & openId;
-//                if (!userInfoJSON.isNull("unionId")) {
-//                    userInfo.put("unionId", userInfoJSON.get("unionId"));
-//                }
-//                map.put("userInfo", userInfo);
+                user.setNickname(nickname);
+                user.setGender(gender);
+                user.setCity(city);
+                user.setProvince(province);
+                user.setCountry(country);
+                user.setFaceImage(faceImage);
+                userService.updateUserInfo(user);
             } else {
                 return JSONResult.errorMsg("解密失败");
             }
@@ -84,7 +97,24 @@ public class WXLoginController {
             e.printStackTrace();
             return JSONResult.errorException(e.getMessage());
         }
-        return JSONResult.ok("解密成功");
+        UsersVO userVO = setUserRedisSessionToken(user);
+        return JSONResult.ok(userVO);
+    }
+
+    @PostMapping("/logout")
+    public JSONResult logout(String userId){
+        redis.del(USER_REDIS_SESSION + ":" + userId);
+        return JSONResult.ok();
+    }
+
+    private UsersVO setUserRedisSessionToken(Users userModel) {
+        String uniqueToken = UUID.randomUUID().toString();
+        redis.set(USER_REDIS_SESSION + ":" + userModel.getId(), uniqueToken, 60 * 60 * 12);
+
+        UsersVO userVO = new UsersVO();
+        BeanUtils.copyProperties(userModel, userVO);
+        userVO.setUserToken(uniqueToken);
+        return userVO;
     }
 
 }

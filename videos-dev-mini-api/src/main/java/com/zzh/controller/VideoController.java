@@ -3,8 +3,10 @@ package com.zzh.controller;
 import com.zzh.enums.VideoStatusEnum;
 import com.zzh.pojo.Bgm;
 import com.zzh.pojo.Comments;
+import com.zzh.pojo.Users;
 import com.zzh.pojo.Videos;
 import com.zzh.service.BgmService;
+import com.zzh.service.UserService;
 import com.zzh.service.VideoService;
 import com.zzh.utils.*;
 import org.apache.commons.io.IOUtils;
@@ -33,6 +35,9 @@ public class VideoController extends BasicController {
 
     @Autowired
     VideoService videoService;
+
+    @Autowired
+    UserService userService;
 
     /**
      * 上传视频
@@ -131,6 +136,21 @@ public class VideoController extends BasicController {
 
             //删除中间文件
             DeleteFileUtils.delete(videoOutputPath);
+        } else {
+            Bgm bgm = new Bgm();
+            Users user = userService.queryUserInfo(userId);
+            bgm.setAuthor(user.getNickname());
+            bgm.setName(user.getNickname() + "创作的原声");
+            //截取音频MP3
+            ExtractMp3 extractMp3 = new ExtractMp3(FFMPEG_EXE);
+            String videoInputPath = finalVideoPath;
+            String mp3OutputName = UUID.randomUUID().toString() + ".mp3";
+            String mp3OutputPath = FILE_SPACE + "/bgm/" + mp3OutputName;
+            extractMp3.convertor(videoInputPath,mp3OutputPath);
+
+            //保存bgm
+            bgm.setPath("/bgm/" + mp3OutputName);
+            bgmId = videoService.addBgm(bgm);
         }
         System.out.println("uploadPathDB=" + uploadPathDB);
         System.out.println("finalVideoPath=" + finalVideoPath);
@@ -178,42 +198,10 @@ public class VideoController extends BasicController {
         // 保存到数据库中的相对路径
         String uploadPathDB = "/" + userId + "/video";
 
-        FileOutputStream fileOutputStream = null;
-        InputStream inputStream = null;
-        // 文件上传的最终保存路径
-        String finalCoverPath = "";
-        try {
-            if (file != null) {
+        uploadPathDB = UploadUtil.upload(FILE_SPACE,uploadPathDB,file);
 
-                String fileName = file.getOriginalFilename();
-                if (StringUtils.isNotBlank(fileName)) {
-
-                    finalCoverPath = FILE_SPACE + uploadPathDB + "/" + fileName;
-                    // 设置数据库保存的路径
-                    uploadPathDB += ("/" + fileName);
-
-                    File outFile = new File(finalCoverPath);
-                    if (outFile.getParentFile() != null || !outFile.getParentFile().isDirectory()) {
-                        // 创建父文件夹
-                        outFile.getParentFile().mkdirs();
-                    }
-
-                    fileOutputStream = new FileOutputStream(outFile);
-                    inputStream = file.getInputStream();
-                    IOUtils.copy(inputStream, fileOutputStream);
-                }
-
-            } else {
-                return JSONResult.errorMsg("上传出错...");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (uploadPathDB == null || StringUtils.isBlank(uploadPathDB)) {
             return JSONResult.errorMsg("上传出错...");
-        } finally {
-            if (fileOutputStream != null) {
-                fileOutputStream.flush();
-                fileOutputStream.close();
-            }
         }
 
         videoService.updateVideo(videoId, uploadPathDB);

@@ -18,7 +18,7 @@ public class UsersLikeComments {
     private String userId;
 
 
-    @Column
+    @Column(name = "comment_id")
     private String commentId;
 
     public String getId() {

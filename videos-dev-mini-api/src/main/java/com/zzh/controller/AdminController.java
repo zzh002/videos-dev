@@ -9,6 +9,7 @@ import com.zzh.service.UserService;
 import com.zzh.service.VideoService;
 import com.zzh.utils.JSONResult;
 import com.zzh.utils.PagedResult;
+import com.zzh.utils.UploadUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -210,53 +211,23 @@ public class AdminController extends BasicController {
 
     /**
      * 后台-上传bgm
-     * @param files
+     * @param file
      * @return
      * @throws Exception
      */
     @PostMapping("/bgmUpload")
     @ResponseBody
-    public JSONResult bgmUpload(@RequestParam("file") MultipartFile[] files) throws Exception {
+    public JSONResult bgmUpload(@RequestParam("file") MultipartFile file) throws Exception {
 
         // 文件保存的命名空间
         String fileSpace = FILE_SPACE ;
         // 保存到数据库中的相对路径
         String uploadPathDB = "/bgm";
 
-        FileOutputStream fileOutputStream = null;
-        InputStream inputStream = null;
-        try {
-            if (files != null && files.length > 0) {
+        uploadPathDB = UploadUtil.upload(fileSpace,uploadPathDB,file);
 
-                String fileName = files[0].getOriginalFilename();
-                if (StringUtils.isNotBlank(fileName)) {
-                    // 文件上传的最终保存路径
-                    String finalPath = fileSpace + uploadPathDB + "/" + fileName;
-                    // 设置数据库保存的路径
-                    uploadPathDB += ("/" + fileName);
-
-                    File outFile = new File(finalPath);
-                    if (outFile.getParentFile() != null || !outFile.getParentFile().isDirectory()) {
-                        // 创建父文件夹
-                        outFile.getParentFile().mkdirs();
-                    }
-
-                    fileOutputStream = new FileOutputStream(outFile);
-                    inputStream = files[0].getInputStream();
-                    IOUtils.copy(inputStream, fileOutputStream);
-                }
-
-            } else {
-                return JSONResult.errorMsg("上传出错...");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (uploadPathDB == null || StringUtils.isBlank(uploadPathDB)) {
             return JSONResult.errorMsg("上传出错...");
-        } finally {
-            if (fileOutputStream != null) {
-                fileOutputStream.flush();
-                fileOutputStream.close();
-            }
         }
 
         return JSONResult.ok(uploadPathDB);

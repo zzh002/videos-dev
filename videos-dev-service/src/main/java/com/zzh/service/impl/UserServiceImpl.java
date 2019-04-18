@@ -41,40 +41,28 @@ public class UserServiceImpl implements UserService {
     private UsersLikeCommentsMapper usersLikeCommentsMapper;
 
 
-    @Transactional(propagation = Propagation.SUPPORTS)
-    @Override
-    public boolean queryUsernameIsExist(String username) {
-        Users user = new Users();
-        user.setUsername(username);
-
-        Users result = usersMapper.selectOne(user);
-
-        return result == null ? false : true;
-    }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void saveUser(Users user) {
+    public Users saveUser(Users user) {
         String userId = KeyUtils.genUniqueKey();
         if (StringUtils.isBlank(userId)){
-            return;
+            return null;
         }
         user.setId(userId);
         usersMapper.insert(user);
+        return user;
     }
 
-    @Transactional(propagation = Propagation.SUPPORTS)
     @Override
-    public Users queryUserForLogin(String username, String password) {
-
+    public Users queryUserFromOpenid(String openid) {
         Example userExample = new Example(Users.class);
         Example.Criteria criteria = userExample.createCriteria();
-        criteria.andEqualTo("username", username);
-        criteria.andEqualTo("password", password);
-        Users result = usersMapper.selectOneByExample(userExample);
-
-        return result;
+        criteria.andEqualTo("openid", openid);
+        Users user = usersMapper.selectOneByExample(userExample);
+        return user;
     }
+
 
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
@@ -209,23 +197,33 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public PagedResult queryUsers(Users user, Integer page, Integer pageSize) {
-
-        String username = "";
         String nickname = "";
+        Integer gender = -1;
+        String province = "";
+        String city = "";
         if (user != null) {
-            username = user.getUsername();
             nickname = user.getNickname();
+            if (user.getGender() != null) {
+                gender = user.getGender();
+            }
+            province = user.getProvince();
+            city = user.getCity();
         }
-
         PageHelper.startPage(page, pageSize);
 
         Example example = new Example(Users.class);
         Example.Criteria userCriteria = example.createCriteria();
-        if (StringUtils.isNotBlank(username)) {
-            userCriteria.andLike("username","%" + username + "%");
-        }
         if (StringUtils.isNotBlank(nickname)) {
             userCriteria.andLike("nickname","%" + nickname + "%");
+        }
+        if (gender > 0) {
+            userCriteria.andEqualTo("gender",gender);
+        }
+        if (StringUtils.isNotBlank(province)) {
+            userCriteria.andLike("province","%" + province + "%");
+        }
+        if (StringUtils.isNotBlank(city)) {
+            userCriteria.andLike("city","%" + city + "%");
         }
 
         List<Users> userList = usersMapper.selectByExample(example);

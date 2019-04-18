@@ -9,6 +9,7 @@ import com.zzh.pojo.vo.CommentDetail;
 import com.zzh.pojo.vo.CommentsVO;
 import com.zzh.pojo.vo.Reports;
 import com.zzh.pojo.vo.VideosVO;
+import com.zzh.service.BgmService;
 import com.zzh.service.UserService;
 import com.zzh.service.VideoService;
 import com.zzh.utils.KeyUtils;
@@ -108,6 +109,11 @@ public class VideoServiceImpl implements VideoService {
         List<VideosVO> list = videosMapperCustom.queryAllVideos(desc,userId);
         //查询登录用户是否点赞该视频
         for (VideosVO videosVO : list) {
+            Bgm bgm = bgmMapper.selectByPrimaryKey(videosVO.getAudioId());
+            if (bgm != null) {
+                videosVO.setAuthor(bgm.getAuthor());
+                videosVO.setName(bgm.getName());
+            }
             videosVO.setIsPraise(userService.isUserLikeVideo(loginUserId, videosVO.getId()));
         }
 
@@ -355,14 +361,15 @@ public class VideoServiceImpl implements VideoService {
     }
 
     @Override
-    public void addBgm(Bgm bgm) {
+    public String addBgm(Bgm bgm) {
         String bgmId = KeyUtils.genUniqueKey();
         bgm.setId(bgmId);
         bgmMapper.insert(bgm);
+        return bgmId;
 
-        Map<String, String> map = new HashMap<>();
-        map.put("operType", BGMOperatorTypeEnum.ADD.type);
-        map.put("path", bgm.getPath());
+//        Map<String, String> map = new HashMap<>();
+//        map.put("operType", BGMOperatorTypeEnum.ADD.type);
+//        map.put("path", bgm.getPath());
 
 //        zkCurator.sendBgmOperator(bgmId, JsonUtils.objectToJson(map));
     }

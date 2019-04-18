@@ -10,16 +10,12 @@ import com.zzh.utils.PagedResult;
  **/
 public interface UserService {
 
-    //判断用户名是否存在
-    boolean queryUsernameIsExist(String username);
 
     //保存用户
-    void saveUser(Users user);
+    Users saveUser(Users user);
 
-    /**
-     * @Description: 用户登录，根据用户名和密码查询用户
-     */
-    Users queryUserForLogin(String username, String password);
+    //查询用户（openid）
+    Users queryUserFromOpenid(String openid);
 
     /**
      * @Description: 用户修改信息

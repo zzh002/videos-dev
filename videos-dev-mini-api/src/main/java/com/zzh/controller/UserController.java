@@ -6,6 +6,7 @@ import com.zzh.pojo.vo.PublisherVideo;
 import com.zzh.pojo.vo.UsersVO;
 import com.zzh.service.UserService;
 import com.zzh.utils.JSONResult;
+import com.zzh.utils.UploadUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -30,7 +31,7 @@ public class UserController extends BasicController{
 
     @PostMapping("/uploadFace")
     public JSONResult uploadFace(String userId,
-                                 @RequestParam("file") MultipartFile[] files) throws Exception {
+                                 @RequestParam("file") MultipartFile file) throws Exception {
 
         if (StringUtils.isBlank(userId)) {
             return JSONResult.errorMsg("用户id不能为空...");
@@ -41,40 +42,10 @@ public class UserController extends BasicController{
         // 保存到数据库中的相对路径
         String uploadPathDB = "/" + userId + "/face";
 
-        FileOutputStream fileOutputStream = null;
-        InputStream inputStream = null;
-        try {
-            if (files != null && files.length > 0) {
+        uploadPathDB = UploadUtil.upload(fileSpace,uploadPathDB,file);
 
-                String fileName = files[0].getOriginalFilename();
-                if (StringUtils.isNotBlank(fileName)) {
-                    // 文件上传的最终保存路径
-                    String finalFacePath = fileSpace + uploadPathDB + "/" + fileName;
-                    // 设置数据库保存的路径
-                    uploadPathDB += ("/" + fileName);
-
-                    File outFile = new File(finalFacePath);
-                    if (outFile.getParentFile() != null || !outFile.getParentFile().isDirectory()) {
-                        // 创建父文件夹
-                        outFile.getParentFile().mkdirs();
-                    }
-
-                    fileOutputStream = new FileOutputStream(outFile);
-                    inputStream = files[0].getInputStream();
-                    IOUtils.copy(inputStream, fileOutputStream);
-                }
-
-            } else {
-                return JSONResult.errorMsg("上传出错...");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (uploadPathDB == null || StringUtils.isBlank(uploadPathDB)) {
             return JSONResult.errorMsg("上传出错...");
-        } finally {
-            if (fileOutputStream != null) {
-                fileOutputStream.flush();
-                fileOutputStream.close();
-            }
         }
 
         Users user = new Users();

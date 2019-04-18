@@ -11,14 +11,29 @@ public class Users {
     private String id;
 
     /**
-     * 用户名
+     * 用户唯一标识
      */
-    private String username;
+    private String openid;
 
     /**
-     * 密码
+     * 性别 0：未知、1：男、2：女
      */
-    private String password;
+    private Integer gender;
+
+    /**
+     * 所在国家
+     */
+    private String country;
+
+    /**
+     * 所在省份
+     */
+    private String province;
+
+    /**
+     * 所在城市
+     */
+    private String city;
 
     /**
      * 我的头像，如果没有默认给一张
@@ -35,30 +50,32 @@ public class Users {
      * 我的粉丝数量
      */
     @Column(name = "fans_counts")
-    private Integer fansCounts;
+    private Integer fansCounts = 0;
 
     /**
      * 我关注的人总数
      */
     @Column(name = "follow_counts")
-    private Integer followCounts;
+    private Integer followCounts = 0;
 
     /**
      * 我接受到的赞美/收藏 的数量
      */
     @Column(name = "receive_like_counts")
-    private Integer receiveLikeCounts;
+    private Integer receiveLikeCounts = 0;
 
     public Users() {
         super();
     }
 
-    public Users(String id, String username, String password, String faceImage, String nickname, Integer fansCounts,
-                 Integer followCounts, Integer receiveLikeCounts) {
-        super();
+    public Users(String id, String openid, Integer gender, String country, String province, String city,
+                 String faceImage, String nickname, Integer fansCounts, Integer followCounts, Integer receiveLikeCounts) {
         this.id = id;
-        this.username = username;
-        this.password = password;
+        this.openid = openid;
+        this.gender = gender;
+        this.country = country;
+        this.province = province;
+        this.city = city;
         this.faceImage = faceImage;
         this.nickname = nickname;
         this.fansCounts = fansCounts;
@@ -81,39 +98,53 @@ public class Users {
     }
 
     /**
-     * 获取用户名
+     * 获取openid
      *
-     * @return username - 用户名
+     * @return openid - 用户唯一标识
      */
-    public String getUsername() {
-        return username;
+    public String getOpenid() {
+        return openid;
     }
 
     /**
-     * 设置用户名
+     * 设置openid
      *
-     * @param username 用户名
+     * @param openid 用户唯一标识
      */
-    public void setUsername(String username) {
-        this.username = username;
+    public void setOpenid(String openid) {
+        this.openid = openid;
     }
 
-    /**
-     * 获取密码
-     *
-     * @return password - 密码
-     */
-    public String getPassword() {
-        return password;
+    public Integer getGender() {
+        return gender;
     }
 
-    /**
-     * 设置密码
-     *
-     * @param password 密码
-     */
-    public void setPassword(String password) {
-        this.password = password;
+    public void setGender(Integer gender) {
+        this.gender = gender;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 
     /**
