@@ -361,6 +361,24 @@ public class VideoServiceImpl implements VideoService {
     }
 
     @Override
+    public PagedResult queryVideoList(Integer page, Integer pageSize) {
+        PageHelper.startPage(page, pageSize);
+
+        Example example = new Example(Bgm.class);
+        List<Videos> list = videosMapper.selectByExample(example);
+
+        PageInfo<Videos> pageList = new PageInfo<>(list);
+
+        PagedResult result = new PagedResult();
+        result.setTotal(pageList.getPages());
+        result.setRows(list);
+        result.setPage(page);
+        result.setRecords(pageList.getTotal());
+
+        return result;
+    }
+
+    @Override
     public String addBgm(Bgm bgm) {
         String bgmId = KeyUtils.genUniqueKey();
         bgm.setId(bgmId);

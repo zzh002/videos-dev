@@ -155,7 +155,7 @@ public class VideoController extends BasicController {
         System.out.println("uploadPathDB=" + uploadPathDB);
         System.out.println("finalVideoPath=" + finalVideoPath);
 
-//        // 对视频进行截图
+       // 对视频进行截图
         FetchVideoCover videoInfo = new FetchVideoCover(FFMPEG_EXE);
         videoInfo.getCover(finalVideoPath, FILE_SPACE + coverPathDB);
 

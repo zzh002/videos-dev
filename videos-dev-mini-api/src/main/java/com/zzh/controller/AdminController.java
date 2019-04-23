@@ -244,6 +244,29 @@ public class AdminController extends BasicController {
     }
 
     /**
+     * 后台-视频列表界面
+     * @param map
+     * @return
+     */
+    @GetMapping("/showVideoList")
+    public ModelAndView showVideoList(Map<String, Object> map) {
+        return new ModelAndView("video/videoList",map);
+    }
+
+    /**
+     * 后台-获取视频列表
+     * @param page
+     * @return
+     */
+    @PostMapping("/videoList")
+    @ResponseBody
+    public PagedResult videoList(Integer page) {
+
+        PagedResult result = videoService.queryVideoList(page, 10);
+        return result;
+    }
+
+    /**
      * 后台-获取用户列表
      * @param user
      * @param page

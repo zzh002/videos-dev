@@ -45,13 +45,13 @@
                	<!-- 背景音乐 start -->
 				<li class="nav-item ">
                     <a href="javascript:;" class="nav-link nav-toggle">
-                        <i class="icon-basket-loaded"></i>
+                        <i class="icon-music-tone"></i>
                         <span class="title">bgm管理</span>
 						<span class="arrow"></span>
                     </a>
                     <ul class="sub-menu">
 						<li class="nav-item ">
-                            <a id="bgmListMenu" href="/videos/admin/showBgmList" class="ajaxify nav-link " id="bgmListMenu">
+                            <a id="bgmListMenu" href="/videos/admin/showBgmList" class="ajaxify nav-link ">
                                 <span class="title">bgm列表</span>
                             </a>
                         </li>
@@ -66,7 +66,7 @@
                	<!-- 举报管理 start -->
 				<li class="nav-item ">
                     <a href="javascript:;" class="nav-link nav-toggle">
-                        <i class="icon-notebook"></i>
+                        <i class="icon-info"></i>
                         <span class="title">举报管理</span>
 						<span class="arrow"></span>
                     </a>
@@ -78,6 +78,22 @@
                         </li>
                     </ul>
                	</li>
+
+                <!-- 视频管理 start -->
+                <li class="nav-item ">
+                    <a href="javascript:;" class="nav-link nav-toggle">
+                        <i class="icon-disc"></i>
+                        <span class="title">视频管理</span>
+                        <span class="arrow"></span>
+                    </a>
+                    <ul class="sub-menu">
+                        <li class="nav-item ">
+                            <a href="/videos/admin/showVideoList" class="ajaxify nav-link ">
+                                <span class="title">视频列表</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
                	
             </ul>
             <!-- END SIDEBAR MENU -->

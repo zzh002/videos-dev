@@ -73,6 +73,8 @@ public interface VideoService {
 
     PagedResult queryBgmList(Integer page, Integer pageSize);
 
+    PagedResult queryVideoList(Integer page, Integer pageSize);
+
     String addBgm(Bgm bgm);
 
     void deleteBgm(String id);

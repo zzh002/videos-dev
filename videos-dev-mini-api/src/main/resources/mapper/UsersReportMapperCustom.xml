@@ -8,12 +8,12 @@
 	    	ur.title as title,
 	    	ur.content as content,
 	    	ur.create_date as createDate,
-	    	du.username as dealUsername,
+	    	du.nickname as dealUsername,
 	    	v.id as dealVideoId,
 	    	v.video_desc as videoDesc,
 	    	v.video_path as videoPath,
 	    	v.status as status,
-	    	u.username as submitUsername
+	    	u.nickname as submitUsername
 	 	from users_report ur 
 		 	left join users du on ur.deal_user_id = du.id 
 		 	left join videos v on ur.deal_video_id = v.id 
