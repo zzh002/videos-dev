@@ -30,7 +30,7 @@
 				<li class="nav-item ">
                     <a href="javascript:;" class="nav-link nav-toggle">
                         <i class="icon-user"></i>
-                        <span class="title">用户信息</span>
+                        <span class="title">用户管理</span>
 						<span class="arrow"></span>
                     </a>
                     <ul class="sub-menu">
@@ -62,22 +62,6 @@
                         </li>
                     </ul>
                	</li>
-               	
-               	<!-- 举报管理 start -->
-				<li class="nav-item ">
-                    <a href="javascript:;" class="nav-link nav-toggle">
-                        <i class="icon-info"></i>
-                        <span class="title">举报管理</span>
-						<span class="arrow"></span>
-                    </a>
-                    <ul class="sub-menu">
-						<li class="nav-item ">
-                            <a href="/videos/admin/showReportList" class="ajaxify nav-link ">
-                                <span class="title">举报列表</span>
-                            </a>
-                        </li>
-                    </ul>
-               	</li>
 
                 <!-- 视频管理 start -->
                 <li class="nav-item ">
@@ -94,7 +78,24 @@
                         </li>
                     </ul>
                 </li>
-               	
+
+                <!-- 举报管理 start -->
+				<li class="nav-item ">
+                    <a href="javascript:;" class="nav-link nav-toggle">
+                        <i class="icon-info"></i>
+                        <span class="title">举报管理</span>
+						<span class="arrow"></span>
+                    </a>
+                    <ul class="sub-menu">
+						<li class="nav-item ">
+                            <a href="/videos/admin/showReportList" class="ajaxify nav-link ">
+                                <span class="title">举报列表</span>
+                            </a>
+                        </li>
+                    </ul>
+               	</li>
+
+
             </ul>
             <!-- END SIDEBAR MENU -->
         </div>

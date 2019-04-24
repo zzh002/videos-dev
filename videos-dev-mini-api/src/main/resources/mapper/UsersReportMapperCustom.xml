@@ -18,6 +18,26 @@
 		 	left join users du on ur.deal_user_id = du.id 
 		 	left join videos v on ur.deal_video_id = v.id 
 			left join users u on ur.userid=u.id
+		where
+			1 = 1
+			<if test=" id != null and id != '' ">
+				and ur.id  like  '%${id}%'
+			</if>
+			<if test=" title != null and title != '' ">
+				and ur.title = #{title}
+			</if>
+			<if test=" dealUsername != null and dealUsername != '' ">
+				and du.nickname  like  '%${dealUsername}%'
+			</if>
+			<if test=" dealVideoId != null and dealVideoId != '' ">
+				and v.id  like  '%${dealVideoId}%'
+			</if>
+			<if test=" submitUsername != null and submitUsername != '' ">
+				and u.nickname  like  '%${submitUsername}%'
+			</if>
+			<if test=" status != null and status != 0 ">
+				and v.status = #{status}
+			</if>
 		order by ur.create_date desc
 	</select>
 

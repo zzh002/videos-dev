@@ -39,4 +39,7 @@ public interface VideosMapperCustom extends MyMapper<Videos> {
 	 * @Description: 对视频的评论数量进行累加
 	 */
 	void addVideoCommentCount(String videoId);
+
+	List<VideosVO> queryVideoList(@Param("id") String id ,@Param("userId") String userId ,
+								  @Param("nickname") String nickname, @Param("status") Integer status);
 }

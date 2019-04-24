@@ -10,7 +10,7 @@ var List = function () {
 		
 		var jqGrid = $("#usersList");  
         jqGrid.jqGrid({  
-            caption: "短视频用户列表",  
+            caption: "用户列表",
             url: hdnContextPath + "/admin/userlist",
             mtype: "post",  
             styleUI: 'Bootstrap',//设置jqgrid的全局样式为bootstrap样式  

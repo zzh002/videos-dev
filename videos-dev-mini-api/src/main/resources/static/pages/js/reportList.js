@@ -118,6 +118,15 @@ var UsersReportsList = function () {
         
         // 不显示水平滚动条
         jqGrid.closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" });
+
+        // 条件查询所有视频列表
+        $("#searchUsersReportsButton").click(function(){
+            var searchUsersReportsForm = $("#searchUsersReportsForm");
+            jqGrid.jqGrid().setGridParam({
+                page: 1,
+                url: hdnContextPath + "/admin/reportList?" + searchUsersReportsForm.serialize(),
+            }).trigger("reloadGrid");
+        });
     }
     
     return {

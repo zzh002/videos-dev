@@ -3,6 +3,8 @@ package com.zzh.service;
 import com.zzh.pojo.Bgm;
 import com.zzh.pojo.Comments;
 import com.zzh.pojo.Videos;
+import com.zzh.pojo.vo.Reports;
+import com.zzh.pojo.vo.VideosVO;
 import com.zzh.utils.PagedResult;
 
 import java.util.List;
@@ -67,13 +69,13 @@ public interface VideoService {
      */
     PagedResult getAllComments(String videoId,String loginUserId, Integer page, Integer pageSize);
 
-    PagedResult queryReportList(Integer page, Integer pageSize);
+    PagedResult queryReportList(Reports reports, Integer page, Integer pageSize);
 
     void updateVideoStatus(String videoId, Integer status);
 
-    PagedResult queryBgmList(Integer page, Integer pageSize);
+    PagedResult queryBgmList(Bgm bgm, Integer page, Integer pageSize);
 
-    PagedResult queryVideoList(Integer page, Integer pageSize);
+    PagedResult queryVideoList(VideosVO videosVO, Integer page, Integer pageSize);
 
     String addBgm(Bgm bgm);
 

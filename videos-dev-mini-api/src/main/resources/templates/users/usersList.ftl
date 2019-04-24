@@ -29,6 +29,10 @@
 		<div class="col-md-12">
 			<br/>
 				<form id="searchUserListForm" class="form-inline" method="post" role="form">
+                    <div class="form-group">
+                        <label class="sr-only" for="id">ID:</label>
+                        <input id="id" name="id" type="text" class="form-control" placeholder="ID" />
+                    </div>
 					<div class="form-group">
 						<label class="sr-only" for="nickname">昵称:</label>
 						<input id="nickname" name="nickname" type="text" class="form-control" placeholder="昵称" />

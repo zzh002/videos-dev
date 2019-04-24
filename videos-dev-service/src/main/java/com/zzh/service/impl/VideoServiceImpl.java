@@ -15,6 +15,7 @@ import com.zzh.service.VideoService;
 import com.zzh.utils.KeyUtils;
 import com.zzh.utils.PagedResult;
 import com.zzh.utils.TimeAgoUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -315,11 +316,29 @@ public class VideoServiceImpl implements VideoService {
     }
 
     @Override
-    public PagedResult queryReportList(Integer page, Integer pageSize) {
+    public PagedResult queryReportList(Reports reports, Integer page, Integer pageSize) {
+
+        String id = "";
+        String title = "";
+        String dealUsername = "";
+        String dealVideoId = "";
+        String submitUsername = "";
+        Integer status = 0;
+        if (reports != null) {
+            id = reports.getId();
+            title = reports.getTitle();
+            dealUsername = reports.getDealUsername();
+            dealVideoId = reports.getDealVideoId();
+            submitUsername = reports.getSubmitUsername();
+            if (reports.getStatus() != null) {
+                status = reports.getStatus();
+            }
+        }
 
         PageHelper.startPage(page, pageSize);
 
-        List<Reports> reportsList = usersReportMapperCustom.selectAllVideoReport();
+        List<Reports> reportsList = usersReportMapperCustom.
+                selectAllVideoReport(id,title,dealUsername,dealVideoId,submitUsername,status);
 
         PageInfo<Reports> pageList = new PageInfo<Reports>(reportsList);
 
@@ -342,11 +361,30 @@ public class VideoServiceImpl implements VideoService {
     }
 
     @Override
-    public PagedResult queryBgmList(Integer page, Integer pageSize) {
+    public PagedResult queryBgmList(Bgm bgm, Integer page, Integer pageSize) {
+
+        String id = "";
+        String author = "";
+        String name = "";
+        if (bgm != null) {
+            id = bgm.getId();
+            author = bgm.getAuthor();
+            name = bgm.getName();
+        }
 
         PageHelper.startPage(page, pageSize);
 
         Example example = new Example(Bgm.class);
+        Example.Criteria userCriteria = example.createCriteria();
+        if (StringUtils.isNotBlank(id)) {
+            userCriteria.andLike("id","%" + id + "%");
+        }
+        if (StringUtils.isNotBlank(author)) {
+            userCriteria.andLike("author","%" + author + "%");
+        }
+        if (StringUtils.isNotBlank(name)) {
+            userCriteria.andLike("name","%" + name + "%");
+        }
         List<Bgm> list = bgmMapper.selectByExample(example);
 
         PageInfo<Bgm> pageList = new PageInfo<>(list);
@@ -361,13 +399,23 @@ public class VideoServiceImpl implements VideoService {
     }
 
     @Override
-    public PagedResult queryVideoList(Integer page, Integer pageSize) {
+    public PagedResult queryVideoList(VideosVO videosVO , Integer page, Integer pageSize) {
         PageHelper.startPage(page, pageSize);
+        String id = "";
+        String userId = "";
+        String nickname = "";
+        Integer status = 0;
+        if (videosVO != null) {
+            id = videosVO.getId();
+            userId = videosVO.getUserId();
+            nickname = videosVO.getNickname();
+            if (videosVO.getStatus() != null) {
+                status = videosVO.getStatus();
+            }
+        }
+        List<VideosVO> list = videosMapperCustom.queryVideoList(id, userId, nickname, status);
 
-        Example example = new Example(Bgm.class);
-        List<Videos> list = videosMapper.selectByExample(example);
-
-        PageInfo<Videos> pageList = new PageInfo<>(list);
+        PageInfo<VideosVO> pageList = new PageInfo<>(list);
 
         PagedResult result = new PagedResult();
         result.setTotal(pageList.getPages());

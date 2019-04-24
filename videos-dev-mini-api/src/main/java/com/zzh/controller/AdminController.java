@@ -5,6 +5,8 @@ import com.zzh.enums.VideoStatusEnum;
 import com.zzh.pojo.AdminUser;
 import com.zzh.pojo.Bgm;
 import com.zzh.pojo.Users;
+import com.zzh.pojo.vo.Reports;
+import com.zzh.pojo.vo.VideosVO;
 import com.zzh.service.UserService;
 import com.zzh.service.VideoService;
 import com.zzh.utils.JSONResult;
@@ -75,11 +77,11 @@ public class AdminController extends BasicController {
                                     HttpServletRequest request) {
         if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
             return JSONResult.errorMap("用户名和密码不能为空");
-        } else if (username.equals("lee") && password.equals("lee")) {
+        } else if (username.equals("zzh") && password.equals("123")) {
 
             String token = UUID.randomUUID().toString();
             AdminUser user = new AdminUser(username, password, token);
-            request.getSession().setAttribute("Admin-session", user);
+            request.getSession().setAttribute(ADMIN_SESSION, user);
             return JSONResult.ok();
         }
 
@@ -119,9 +121,9 @@ public class AdminController extends BasicController {
      */
     @PostMapping("/reportList")
     @ResponseBody
-    public PagedResult reportList(Integer page) {
+    public PagedResult reportList(Reports reports, Integer page) {
 
-        PagedResult result = videoService.queryReportList(page, 10);
+        PagedResult result = videoService.queryReportList(reports, page == null ? 1 : page, 10);
         return result;
     }
 
@@ -168,8 +170,8 @@ public class AdminController extends BasicController {
      */
     @PostMapping("/queryBgmList")
     @ResponseBody
-    public PagedResult queryBgmList(Integer page) {
-        return videoService.queryBgmList(page, 10);
+    public PagedResult queryBgmList(Bgm bgm, Integer page) {
+        return videoService.queryBgmList(bgm, page == null ? 1 : page, 10);
     }
 
     /**
@@ -260,9 +262,9 @@ public class AdminController extends BasicController {
      */
     @PostMapping("/videoList")
     @ResponseBody
-    public PagedResult videoList(Integer page) {
+    public PagedResult videoList(VideosVO videosVO , Integer page) {
 
-        PagedResult result = videoService.queryVideoList(page, 10);
+        PagedResult result = videoService.queryVideoList(videosVO, page == null ? 1 : page, 10);
         return result;
     }
 

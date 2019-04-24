@@ -30,7 +30,7 @@ var BgmList = function() {
 		
 		var jqGrid = $("#bgmList");  
         jqGrid.jqGrid({  
-            caption: "所有bgm列表",  
+            caption: "bgm列表",
             url: hdnContextPath + "/admin/queryBgmList",
             mtype: "post",  
             styleUI: 'Bootstrap',//设置jqgrid的全局样式为bootstrap样式  
@@ -82,6 +82,15 @@ var BgmList = function() {
         
         // 不显示水平滚动条
         jqGrid.closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" });
+
+        // 条件查询所有Bgm列表
+        $("#searchBgmListButton").click(function(){
+            var searchBgmListForm = $("#searchBgmListForm");
+            jqGrid.jqGrid().setGridParam({
+                page: 1,
+                url: hdnContextPath + "/admin/queryBgmList?" + searchBgmListForm.serialize(),
+            }).trigger("reloadGrid");
+        });
     	
     }
     

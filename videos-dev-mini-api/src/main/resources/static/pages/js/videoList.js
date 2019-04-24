@@ -60,10 +60,19 @@ var VideoList = function () {
             mtype: "post",  
             styleUI: 'Bootstrap',//设置jqgrid的全局样式为bootstrap样式  
             datatype: "json",  
-            colNames: ['ID', '视频封面',  '播放视频',  '视频描述', '视频长度',  '视频状态',  '上传日期', "操作"],
+            colNames: ['ID',  '用户ID',  '用户昵称',  '用户头像',  '视频封面',  '播放视频',  '视频描述', '视频长度',  '视频状态',  '上传日期', "操作"],
             colModel: [  
                 { name: 'id', index: 'id', width: 30, sortable: false, hidden: false },
-                { name: 'coverPath', index: 'coverPath', width: 30, sortable: false,
+                { name: 'userId', index: 'userId', width: 30, sortable: false, hidden: false },
+                { name: 'nickname', index: 'nickname', width: 30, sortable: false, hidden: false },
+                { name: 'faceImage', index: 'faceImage', width: 50, sortable: false,
+                    formatter:function(cellvalue, options, rowObject) {
+                        var src = cellvalue;
+                        var img = "<img src='" + src + "' width='120'></img>"
+                        return img;
+                    }
+                },
+                { name: 'coverPath', index: 'coverPath', width: 50, sortable: false,
                     formatter:function(cellvalue, options, rowObject) {
                         var src = apiServer + cellvalue;
                         var img = "<img src='" + src + "' width='120'></img>"
@@ -84,7 +93,7 @@ var VideoList = function () {
                         return display;
                     }
                 },
-                { name: 'status', index: 'status', width: 40, sortable: false, hidden: false,
+                { name: 'status', index: 'status', width: 30, sortable: false, hidden: false,
                 	formatter:function(cellvalue, options, rowObject) {
 			    		return cellvalue==1 ? '正常' : '禁播';
 			    	}
@@ -127,6 +136,16 @@ var VideoList = function () {
         
         // 不显示水平滚动条
         jqGrid.closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" });
+
+        // 条件查询所有视频列表
+        $("#searchVideoListButton").click(function(){
+            var searchVideoListForm = $("#searchVideoListForm");
+            jqGrid.jqGrid().setGridParam({
+                page: 1,
+                url: hdnContextPath + "/admin/videoList?" + searchVideoListForm.serialize(),
+            }).trigger("reloadGrid");
+        });
+
     }
     
     return {

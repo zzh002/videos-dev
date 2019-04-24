@@ -201,6 +201,7 @@ public class UserServiceImpl implements UserService {
         Integer gender = -1;
         String province = "";
         String city = "";
+        String id = "";
         if (user != null) {
             nickname = user.getNickname();
             if (user.getGender() != null) {
@@ -208,11 +209,15 @@ public class UserServiceImpl implements UserService {
             }
             province = user.getProvince();
             city = user.getCity();
+            id = user.getId();
         }
         PageHelper.startPage(page, pageSize);
 
         Example example = new Example(Users.class);
         Example.Criteria userCriteria = example.createCriteria();
+        if (StringUtils.isNotBlank(id)) {
+            userCriteria.andLike("id","%" + id + "%");
+        }
         if (StringUtils.isNotBlank(nickname)) {
             userCriteria.andLike("nickname","%" + nickname + "%");
         }
