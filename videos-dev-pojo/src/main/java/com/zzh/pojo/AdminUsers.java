@@ -4,20 +4,19 @@ package com.zzh.pojo;
  * @author ZZH
  * @date 2019/1/23 9:11
  **/
-public class AdminUser {
+public class AdminUsers {
 
-    private String usertoken;
+    private String id;
     private String username;
     private String password;
 
-    public AdminUser() {
+    public AdminUsers() {
     }
 
-    public AdminUser(String username, String password, String usertoken) {
-        super();
+    public AdminUsers(String id, String username, String password) {
+        this.id = id;
         this.username = username;
         this.password = password;
-        this.usertoken = usertoken;
     }
 
     public String getUsername() {
@@ -33,11 +32,11 @@ public class AdminUser {
         this.password = password;
     }
 
-    public String getUsertoken() {
-        return usertoken;
+    public String getId() {
+        return id;
     }
 
-    public void setUsertoken(String usertoken) {
-        this.usertoken = usertoken;
+    public void setId(String id) {
+        this.id = id;
     }
 }

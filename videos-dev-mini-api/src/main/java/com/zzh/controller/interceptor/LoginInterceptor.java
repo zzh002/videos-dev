@@ -1,5 +1,6 @@
 package com.zzh.controller.interceptor;
 
+import com.zzh.pojo.vo.AdminUsersVO;
 import com.zzh.utils.RedisOperator;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +24,24 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
                              Object arg2) throws Exception {
-
-        if(null == request.getSession().getAttribute(ADMIN_SESSION)){
+        AdminUsersVO adminUsersVO = (AdminUsersVO) request.getSession().getAttribute(ADMIN_SESSION);
+        if(adminUsersVO == null ){
+            System.out.println("请登录...");
             response.sendRedirect(request.getContextPath()+"/admin/login");
             return false;
         }
-
+        String uniqueToken = redis.get(ADMIN_SESSION + ":" + adminUsersVO.getId());
+        if (StringUtils.isEmpty(uniqueToken) && StringUtils.isBlank(uniqueToken)) {
+            System.out.println("请登录...");
+            response.sendRedirect(request.getContextPath()+"/admin/login");
+            return false;
+        } else {
+            if (!uniqueToken.equals(adminUsersVO.getToken())) {
+                System.out.println("账号被挤出...");
+                response.sendRedirect(request.getContextPath()+"/admin/login");
+                return false;
+            }
+        }
         // 放行
         return true;
 

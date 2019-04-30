@@ -2,18 +2,20 @@ package com.zzh.controller;
 
 import com.zzh.config.ProjectConfig;
 import com.zzh.enums.VideoStatusEnum;
-import com.zzh.pojo.AdminUser;
+import com.zzh.pojo.AdminUsers;
 import com.zzh.pojo.Bgm;
 import com.zzh.pojo.Users;
+import com.zzh.pojo.vo.AdminUsersVO;
 import com.zzh.pojo.vo.Reports;
 import com.zzh.pojo.vo.VideosVO;
+import com.zzh.service.AdminUsersService;
 import com.zzh.service.UserService;
 import com.zzh.service.VideoService;
 import com.zzh.utils.JSONResult;
 import com.zzh.utils.PagedResult;
 import com.zzh.utils.UploadUtil;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -21,9 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.util.Map;
 import java.util.UUID;
 
@@ -41,6 +40,8 @@ public class AdminController extends BasicController {
     private UserService usersService;
     @Autowired
     private VideoService videoService;
+    @Autowired
+    private AdminUsersService adminUsersService;
 
     /**
      * 后台-主页
@@ -77,15 +78,16 @@ public class AdminController extends BasicController {
                                     HttpServletRequest request) {
         if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
             return JSONResult.errorMap("用户名和密码不能为空");
-        } else if (username.equals("zzh") && password.equals("123")) {
-
-            String token = UUID.randomUUID().toString();
-            AdminUser user = new AdminUser(username, password, token);
-            request.getSession().setAttribute(ADMIN_SESSION, user);
-            return JSONResult.ok();
+        } else {
+            AdminUsers adminUsers = adminUsersService.queryAdminUser(username);
+            if (adminUsers != null && adminUsers.getPassword().equals(password)) {
+                adminUsers.setPassword("");
+                AdminUsersVO adminUsersVO = setRedisSessionToken(adminUsers);
+                request.getSession().setAttribute(ADMIN_SESSION, adminUsersVO);
+                return JSONResult.ok();
+            }
+            return JSONResult.errorMsg("登陆失败，请重试...");
         }
-
-        return JSONResult.errorMsg("登陆失败，请重试...");
     }
 
     /**
@@ -97,7 +99,9 @@ public class AdminController extends BasicController {
     @RequestMapping("/logout")
     public ModelAndView logout(Map<String, Object> map,
                                HttpServletRequest request) {
-        request.getSession().removeAttribute("Admin-session");
+        AdminUsersVO adminUsersVO = (AdminUsersVO) request.getSession().getAttribute(ADMIN_SESSION);
+        request.getSession().removeAttribute(ADMIN_SESSION);
+        redis.del(ADMIN_SESSION + ":" + adminUsersVO.getId());
         String url = projectConfig.getUrl();
         map.put("url",url);
         return new ModelAndView("login", map);
@@ -282,4 +286,13 @@ public class AdminController extends BasicController {
         return result;
     }
 
+    private AdminUsersVO setRedisSessionToken(AdminUsers model) {
+        String uniqueToken = UUID.randomUUID().toString();
+        redis.set(ADMIN_SESSION + ":" + model.getId(), uniqueToken, 60 * 60 * 12);
+
+        AdminUsersVO adminUsersVO = new AdminUsersVO();
+        BeanUtils.copyProperties(model, adminUsersVO);
+        adminUsersVO.setToken(uniqueToken);
+        return adminUsersVO;
+    }
 }
