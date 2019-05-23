@@ -10,9 +10,9 @@
 <#--<input type="hidden" id="hdnContextPath" name="hdnContextPath" value="http://localhost:8080/videos"/>-->
 <#--<input type="hidden" id="apiServer" name="apiServer" value="http://localhost:8080/videos"/>-->
 <#--<input type="hidden" id="bgmServer" name="bgmServer" value="http://localhost:8080/videos"/>-->
-<input type="hidden" id="hdnContextPath" name="hdnContextPath" value="http://videos.wxsell.top/videos"/>
-<input type="hidden" id="apiServer" name="apiServer" value="http://videos.wxsell.top/videos"/>
-<input type="hidden" id="bgmServer" name="bgmServer" value="http://videos.wxsell.top/videos"/>
+<input type="hidden" id="hdnContextPath" name="hdnContextPath" value="https://videos.wxsell.top/videos"/>
+<input type="hidden" id="apiServer" name="apiServer" value="https://videos.wxsell.top/videos"/>
+<input type="hidden" id="bgmServer" name="bgmServer" value="https://videos.wxsell.top/videos"/>
 
 
 
